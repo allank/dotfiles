@@ -23,6 +23,7 @@ This installs Nix using the [Determinate Systems](https://determinate.systems/po
 ### Setting up Home Manager with this config
 
  - Clone this repo.
+ - Copy the relevant `flake-{system}.nix` to `flake.nix`.  
  - In this repo run: `nix run github:nix-community/home-manager -- switch --flake .`
 
 ## Usage
