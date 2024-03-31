@@ -1,8 +1,8 @@
 { pkgs, ... }: {
   home = {
     stateVersion = "23.11";
-    username = "allank";
-    homeDirectory = "/home/allank";
+    username = "<USER>";
+    homeDirectory = "<HOME>";
     packages = with pkgs; [ 
       bat
       cargo

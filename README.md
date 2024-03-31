@@ -22,8 +22,8 @@ This installs Nix using the [Determinate Systems](https://determinate.systems/po
 
 ### Setting up Home Manager with this config
 
- - Clone this repo.
- - Copy the relevant `flake-{system}.nix` to `flake.nix`.  
+ - Clone this repo. If you don't you have `git` installed you can use `nix` to run it once-off: `nix run nixpkgs#git -- clone https://github.com/allank/dotfiles`
+ - Run `./mklocal` - this should copy the base `flake.nix` and `home.nix` into the root directory of the repo and personalise for your current user and system.
  - In this repo run: `nix run github:nix-community/home-manager -- switch --flake .`
 
 ## Usage

@@ -11,9 +11,9 @@
 
   outputs = { nixpkgs, home-manager, ... }: {
     homeConfigurations = {
-      "allank" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        modules = [ ./home-linux.nix ];
+      "<USER>" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.<SYSTEM>;
+        modules = [ ./home.nix ];
       };
     };
   };
