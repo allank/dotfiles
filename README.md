@@ -26,6 +26,8 @@ This installs Nix using the [Determinate Systems](https://determinate.systems/po
  - Run `./mklocal.sh` - this should copy the base `flake.nix` and `home.nix` into the root directory of the repo and personalise for your current user and system.
  - In this repo run: `nix run github:nix-community/home-manager -- switch --flake .`
 
+*Note:* Currently under `Darwin` the Home Manager install tries to compile `wezterm` and fails.  The `mklocal.sh` script currently comments out the `wezterm` package until I can add a more elegant workaround.
+
 ## Usage
 
 ### Using Nix and Home Manager
@@ -34,6 +36,47 @@ This installs Nix using the [Determinate Systems](https://determinate.systems/po
  - Garbage collecting old configurations: `sudo nix-collect-garbage -d`
  - Running a new appliction without installing: `nix-shell -p neofetch`
 
-### Configured aliases
+### Important key bindings
 
+#### tmux
+
+- `<Leader>`: `<C-s>`
+- New Window: `<C-s><c>`
+- Toggle to last Window: `<C-s><l>`
+- Next Window: `<C-s><n>`
+- Previous Window: `<C-s><p>`
+- Toggle Window Fullscreen: `<C-s><z>`
+
+#### Neovim
+
+- `<Leader>`: `<Space>`
+- Search keymaps: `<Space><s><k>`
+- Open file browser: `<Space><s><b>`
+- Find file browser: `<Space><s><f>`
+- Open buffers: `<Space><Space>`
+- Neovim configs: `<Space><s><n>`
+- Search current word: `<Space><s><w>`
+- Find in current buffer: `<Space></>`
+- Find in open buffers: `<Space><s></>`
+- Find in all files: `<Space><s><g>`
+- Search builtins: `<Space><s><s>`
+- Search diagnostics: `<Space><s><d>`
+- Next diagnostic: `<]><d>`
+- Previous diagnostic: `<[><d>`
+- Error messages: `<Space><e>`
+- Quickfix list: `<Space><q>`
+- Next buffer: `<Tab>`
+- Previous buffer: `<S-Tab>`
+- Close buffer: `<Space><b><d>`
+- Goto definition: `<g><d>`
+- Return to last position: `<C-t>`
+- Find references: `<g><r>`
+- Jump to implementation: `<g><I>`
+- Jump to type definition: `<Space><D>`
+- Find symbols: `<Space><d><s>`
+- Find all symbols: `<Space><w><s>`
+- Rename variable: `<Space><r><n>`
+- Execute code action: `<Space><c><a>`
+- Documentation popup: `<K>`
+- Goto declaration: `<g><D>`
 
