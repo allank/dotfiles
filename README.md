@@ -26,7 +26,11 @@ This installs Nix using the [Determinate Systems](https://determinate.systems/po
  - Run `./mklocal.sh` - this should copy the base `flake.nix` and `home.nix` into the root directory of the repo and personalise for your current user and system.
  - In this repo run: `nix run github:nix-community/home-manager -- switch --flake .`
 
-*Note:* Currently under `Darwin` the Home Manager install tries to compile `wezterm` and fails.  The `mklocal.sh` script currently comments out the `wezterm` package until I can add a more elegant workaround.
+*Note:* 
+
+The `mklocal.sh` script is a messy hack so that I can have a single set of config files for multiple operating systems and architectures.  While there does seem to be ways of doing conditional settings within the `home.nix` file, they do not apper to be available within `flake.nix`.  If there is a less messy way of handling this, please let me know.
+
+Currently under `Darwin` the Home Manager install tries to compile `wezterm` and fails.  The `mklocal.sh` script currently comments out the `wezterm` package until I can add a more elegant workaround.
 
 ## Usage
 
