@@ -1,5 +1,7 @@
 # Configs under Nix and Home Manager
 
+**Moved to [nix-conf](https://github.com/allank/nix-conf)**
+
 An attempt at a unified and cross-platform environment.
 
 Credit to:
