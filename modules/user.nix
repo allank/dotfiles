@@ -64,15 +64,15 @@
     enable = true;
     enableFishIntegration = true;
   };
-  programs.grc = {
-    enable = true;
-    enableFishIntegration = true; 
-  };
+  # programs.grc = {
+  #   enable = true;
+  #   enableFishIntegration = true; 
+  # };
   programs.fish = {
     enable = true;
-    # plugins = [
-    #   { name = "grc"; src = pkgs.fishPlugins.grc.src;}
-    # ];
+    plugins = [
+      { name = "grc"; src = pkgs.fishPlugins.grc.src;}
+    ];
     shellAliases = {
       ls = "exa --color=always";
       cat = "bat";
