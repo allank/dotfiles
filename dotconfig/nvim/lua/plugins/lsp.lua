@@ -1,7 +1,7 @@
 return {
 	-- Extend mason to ensure tools are installed
 	{
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
 		opts = {
 			ensure_installed = {
 				"gopls",
