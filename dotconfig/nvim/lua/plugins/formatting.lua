@@ -6,6 +6,7 @@ return {
 				lua = { "stylua" },
 				python = { "isort", "ruff_format" },
 				go = { "goimports", "gofmt" },
+				solidity = { "forge_fmt" },
 			},
 		},
 	},

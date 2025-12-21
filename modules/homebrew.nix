@@ -12,11 +12,13 @@
     global.brewfile = true;
     taps = [
       "nikitabobko/tap"
+      "foundry-rs/foundry"
     ];
     brews = [
       "qemu"
       "colima"
       "gemini-cli"
+      "foundry"
     ];
     casks = [ 
       "discord" 
