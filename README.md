@@ -48,10 +48,10 @@ cd ~/Dev/dotfiles
 fish, neovim, bat, eza, ripgrep, fzf, jq, starship, grc, tmux, gitui, dust, yazi, xh, atac
 
 ### Development
-python, uv, ruff, go, gopls, node, bun, hugo, foundry, docker, colima
+python, uv, ruff, go, gopls, node, hugo, foundry, docker, colima
 
 ### GUI Apps
-Discord, Spotify, Firefox, Obsidian, Bitwarden, Alfred, Ghostty, Aerospace, Karabiner-Elements, and more
+Discord, Spotify, Firefox, Obsidian, Bitwarden, Alfred, Ghostty, Aerospace, Karabiner-Elements, Antigravity,and more
 
 ### macOS Settings
 - Dock on right side, small icons
