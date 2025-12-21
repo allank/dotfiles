@@ -35,6 +35,7 @@ cd ~/Dev/dotfiles
 │   ├── aerospace/
 │   ├── ghostty/
 │   ├── gitui/
+│   ├── karabiner/
 │   └── tmux/
 │
 ├── dot_gitconfig         # → ~/.gitconfig
@@ -55,5 +56,5 @@ Discord, Spotify, Firefox, Obsidian, Bitwarden, Alfred, Ghostty, Aerospace, Kara
 ### macOS Settings
 - Dock on right side, small icons
 - Finder shows path bar and status bar  
-- Caps Lock → Escape (via Karabiner-Elements)
+- Caps Lock → Hyper key (Cmd+Ctrl+Opt) via Karabiner-Elements
 - Right-click on trackpad enabled
