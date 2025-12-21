@@ -1,6 +1,5 @@
 # Taps
 tap "nikitabobko/tap"
-tap "foundry-rs/foundry"
 
 # CLI Tools
 brew "fish"
