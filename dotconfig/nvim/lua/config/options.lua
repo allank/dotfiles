@@ -1,3 +1,6 @@
+-- LazyVim picker preference
+vim.g.lazyvim_picker = "snacks"
+
 -- Leader keys
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
