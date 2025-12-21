@@ -5,6 +5,9 @@
 fish_add_path /opt/homebrew/bin
 fish_add_path ~/.local/bin
 
+# Homebrew settings
+set -gx HOMEBREW_NO_ENV_HINTS 1
+
 # Aliases
 alias ls="eza --color=always"
 alias cat="bat"

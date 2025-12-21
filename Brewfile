@@ -21,15 +21,12 @@ brew "ruff"
 brew "go"
 brew "gopls"
 brew "node"
-brew "bun"
 brew "hugo"
 
 # Utilities
-brew "atac"
 brew "docker"
 brew "colima"
 brew "xh"
-brew "gitui"
 brew "dust"
 brew "yazi"
 brew "qemu"
@@ -50,6 +47,7 @@ cask "transmission"
 cask "hammerspoon"
 cask "karabiner-elements"
 cask "aerospace"
+cask "antigravity"
 
 # Fonts
 cask "font-fira-code-nerd-font"
