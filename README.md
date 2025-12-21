@@ -1,21 +1,59 @@
-# Personal Nix Config
+# dotfiles
 
-Minimal steps to a functional machine.
+macOS configuration managed with Homebrew, chezmoi, and shell scripts.
 
-Uses [Nix](https://nixos.org), [nix-darwin](https://github.com/LnL7/nix-darwin), [Home Manager](https://nix-community.github.io/home-manager/) and [Homebrew](https://brew.sh) to bootstrap a new machine.
+## Quick Start (New Machine)
 
-## Usage
+```bash
+git clone https://github.com/allank/dotfiles ~/Dev/dotfiles
+cd ~/Dev/dotfiles
+./bootstrap.sh
+```
 
-Install Nix using the [Determinate Nix Installer](https://github.com/DeterminateSystems/nix-installer):
-`curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install`
+## Daily Usage
 
-Install Home Brew:
-`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+| Task | Command |
+|------|---------|
+| **Add/remove packages** | Edit `Brewfile` → `brew bundle` |
+| **Update all packages** | `brew upgrade` |
+| **Apply dotfile changes** | `chezmoi apply` |
+| **Re-apply macOS settings** | `./macos-defaults.sh` |
+| **See what chezmoi would change** | `chezmoi diff` |
+| **Edit a dotfile** | `chezmoi edit ~/.config/fish/config.fish` |
 
-Clone this repo and change into the repo folder
+## Structure
 
-Run initial install:
-`nix run nix-darwin -- switch --flake ./#Allans-MacBook-Pro`
+```
+├── Brewfile              # All packages, casks, taps, fonts
+├── bootstrap.sh          # One-time setup for new machines
+├── macos-defaults.sh     # macOS system preferences
+│
+├── dot_config/           # → ~/.config/
+│   ├── fish/config.fish
+│   ├── nvim/
+│   ├── starship.toml
+│   ├── aerospace/
+│   ├── ghostty/
+│   ├── gitui/
+│   └── tmux/
+│
+├── dot_gitconfig         # → ~/.gitconfig
+└── dot_gitignore_global  # → ~/.gitignore_global
+```
 
-Subsequent updates can be run using `darwin-rebuild`:
-`darwin-rebuild switch --flake ./#Allans-MacBook-Pro`
+## What's Included
+
+### CLI Tools
+fish, neovim, bat, eza, ripgrep, fzf, jq, starship, grc, tmux, gitui, dust, yazi, xh, atac
+
+### Development
+python, uv, ruff, go, gopls, node, bun, hugo, foundry, docker, colima
+
+### GUI Apps
+Discord, Spotify, Firefox, Obsidian, Bitwarden, Alfred, Ghostty, Aerospace, Karabiner-Elements, and more
+
+### macOS Settings
+- Dock on right side, small icons
+- Finder shows path bar and status bar  
+- Caps Lock → Escape (via Karabiner-Elements)
+- Right-click on trackpad enabled

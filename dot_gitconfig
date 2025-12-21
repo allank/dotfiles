@@ -1,0 +1,9 @@
+[user]
+    name = allank
+    email = allan.kent@gmail.com
+
+[init]
+    defaultBranch = main
+
+[core]
+    excludesFile = ~/.gitignore_global

@@ -1,0 +1,19 @@
+# chezmoi ignore file
+# These files are part of the repo but should not be managed as dotfiles
+
+Brewfile
+bootstrap.sh
+macos-defaults.sh
+README.md
+LICENSE
+.git
+.gitignore
+.DS_Store
+
+# Old Nix files (remove these lines after migration is complete)
+*.nix
+flake.lock
+modules/
+configuration.nix
+home.nix
+nix-update

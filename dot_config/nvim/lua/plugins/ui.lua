@@ -1,0 +1,47 @@
+return {
+	-- Colorscheme
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
+		lazy = false,
+		opts = {},
+	},
+
+	-- Set colorscheme in LazyVim
+	{
+		"LazyVim/LazyVim",
+		opts = {
+			colorscheme = "catppuccin",
+		},
+	},
+
+	-- Git signs (extend LazyVim defaults)
+	{
+		"lewis6991/gitsigns.nvim",
+		opts = {
+			signs = {
+				add = { text = "+" },
+				change = { text = "~" },
+				delete = { text = "_" },
+				topdelete = { text = "‾" },
+				changedelete = { text = "~" },
+			},
+		},
+	},
+
+	-- Mini plugins
+	{
+		"nvim-mini/mini.nvim",
+		config = function()
+			require("mini.ai").setup({ n_lines = 500 })
+			require("mini.surround").setup()
+
+			local statusline = require("mini.statusline")
+			statusline.setup({ use_icons = vim.g.have_nerd_font })
+			statusline.section_location = function()
+				return "%2l:%-2v"
+			end
+		end,
+	},
+}
