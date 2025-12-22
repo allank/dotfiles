@@ -23,9 +23,7 @@ require("lazy").setup({
 		{ import = "lazyvim.plugins.extras.lang.go" },
 		{ import = "lazyvim.plugins.extras.lang.python" },
 		{ import = "lazyvim.plugins.extras.lang.markdown" },
-		-- NOTE: Solidity extras disabled due to constant "No results found for select" notifications
-		-- The solidity_ls triggers vim.ui.select constantly. Using treesitter + formatter only instead.
-		-- { import = "lazyvim.plugins.extras.lang.solidity" },
+		{ import = "lazyvim.plugins.extras.lang.solidity" },
 		-- Import custom plugins
 		{ import = "plugins" },
 	},
