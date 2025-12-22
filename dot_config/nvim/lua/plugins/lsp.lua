@@ -10,7 +10,7 @@ return {
 				"ruff",
 				"stylua",
 				"isort",
-				"solidity-ls",
+				-- NOTE: solidity-ls removed due to constant "No results found for select" issue
 			},
 		},
 	},

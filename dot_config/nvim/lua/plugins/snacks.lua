@@ -2,21 +2,7 @@ return {
 	{
 		"folke/snacks.nvim",
 		opts = {
-			picker = {
-				enabled = true,
-				-- Suppress "No results found for select" notifications
-				sources = {
-					select = {
-						-- Don't show notification when no results
-						on_show = function(picker)
-							if picker:empty() then
-								picker:close()
-								return false
-							end
-						end,
-					},
-				},
-			},
+			picker = { enabled = true },
 		},
 		keys = {
 			-- File operations (matching original Telescope bindings)
