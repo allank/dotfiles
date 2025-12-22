@@ -22,6 +22,7 @@ brew "go"
 brew "gopls"
 brew "node"
 brew "hugo"
+brew "solidity"
 
 # Utilities
 brew "docker"
