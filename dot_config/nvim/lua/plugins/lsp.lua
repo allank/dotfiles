@@ -10,7 +10,7 @@ return {
 				"ruff",
 				"stylua",
 				"isort",
-				"solidity-ls",
+				"solidity-ls", -- Re-added for debugging
 			},
 		},
 	},
