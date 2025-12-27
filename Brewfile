@@ -37,7 +37,6 @@ brew "gemini-cli"
 # GUI Apps
 cask "discord"
 cask "spotify"
-cask "whatsapp"
 cask "bitwarden"
 cask "obsidian"
 cask "alfred"
