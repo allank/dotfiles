@@ -46,7 +46,7 @@ cask "ghostty"
 cask "firefox"
 cask "transmission"
 cask "hammerspoon"
-cask "karabiner-elements"
+cask "hyperkey"
 cask "aerospace"
 cask "antigravity"
 

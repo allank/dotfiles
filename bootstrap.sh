@@ -25,6 +25,10 @@ chezmoi init --source="$SCRIPT_DIR" --apply
 echo "⚙️  Applying macOS preferences..."
 "$SCRIPT_DIR/macos-defaults.sh"
 
+# Configure Hyperkey
+echo "⌨️  Configuring Hyperkey..."
+"$SCRIPT_DIR/hyperkey-defaults.sh"
+
 # Set fish as default shell
 echo "🐟 Setting fish as default shell..."
 FISH_PATH="$(which fish)"
