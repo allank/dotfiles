@@ -1,7 +1,6 @@
 # chezmoi ignore file
 # These files are part of the repo but should not be managed as dotfiles
 
-Brewfile
 bootstrap.sh
 macos-defaults.sh
 README.md

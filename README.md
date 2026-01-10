@@ -18,7 +18,7 @@ During setup, you will be prompted to:
 
 | Task | Command |
 |------|---------|
-| **Add/remove packages** | Edit `dot_Brewfile.tmpl` → `chezmoi apply` → `brew bundle --file=~/Brewfile` |
+| **Add/remove packages** | Edit `Brewfile.tmpl` → `chezmoi apply` → `brew bundle --file=~/Brewfile` |
 | **Update all packages** | `brew upgrade` |
 | **Apply dotfile changes** | `chezmoi apply` |
 | **Re-apply macOS settings** | `./macos-defaults.sh` |
@@ -28,7 +28,7 @@ During setup, you will be prompted to:
 ## Structure
 
 ```
-├── dot_Brewfile.tmpl     # Template for Brewfile (Home/Work packages)
+├── Brewfile.tmpl         # Template for Brewfile (Home/Work packages)
 ├── bootstrap.sh          # One-time setup for new machines
 ├── macos-defaults.sh     # macOS system preferences
 │

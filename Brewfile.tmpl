@@ -37,6 +37,8 @@ brew "gemini-cli"
 # GUI Apps
 {{- if eq .profile "home" }}
 cask "discord"
+cask "transmission"
+cask "firefox"
 {{- end }}
 {{- if eq .profile "work" }}
 cask "slack"
@@ -47,9 +49,6 @@ cask "obsidian"
 cask "alfred"
 cask "zotero"
 cask "ghostty"
-cask "firefox"
-cask "transmission"
-cask "hammerspoon"
 cask "hyperkey"
 cask "aerospace"
 cask "antigravity"
