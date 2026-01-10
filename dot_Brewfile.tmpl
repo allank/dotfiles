@@ -35,7 +35,12 @@ brew "foundry"
 brew "gemini-cli"
 
 # GUI Apps
+{{- if eq .profile "home" }}
 cask "discord"
+{{- end }}
+{{- if eq .profile "work" }}
+cask "slack"
+{{- end }}
 cask "spotify"
 cask "bitwarden"
 cask "obsidian"

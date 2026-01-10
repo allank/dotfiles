@@ -1,0 +1,8 @@
+{
+  "track_id": "bootstrap_standardization_20260109",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-09T12:00:00Z",
+  "updated_at": "2026-01-09T12:00:00Z",
+  "description": "Standardize macOS system defaults and bootstrap automation by enhancing macos-defaults.sh and ensuring bootstrap.sh is fully idempotent."
+}

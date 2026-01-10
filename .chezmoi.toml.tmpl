@@ -1,0 +1,6 @@
+sourceDir = {{ .chezmoi.sourceDir | quote }}
+
+[data]
+    profile = {{ $profile := env "DOTFILES_PROFILE" | default "home" }}{{ $profile | quote }}
+    git_name = {{ promptStringOnce . "git_name" "Git Name" | quote }}
+    git_email = {{ promptStringOnce . "git_email" "Git Email" | quote }}
