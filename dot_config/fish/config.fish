@@ -5,6 +5,10 @@
 fish_add_path /opt/homebrew/bin
 fish_add_path ~/.local/bin
 
+# Go
+set -gx GOPATH ~/go
+fish_add_path $GOPATH/bin
+
 # Homebrew settings
 set -gx HOMEBREW_NO_ENV_HINTS 1
 
