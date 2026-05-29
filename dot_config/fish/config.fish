@@ -57,6 +57,11 @@ if command -q grc
     source /opt/homebrew/etc/grc.fish 2>/dev/null || true
 end
 
+# Initialize cargo
+if command -q cargo
+    source "$HOME/.cargo/env.fish"
+end
+
 # Detect Antigravity Agent and hand over to Bash
 if set -q ANTIGRAVITY_AGENT
     # Re-export path to ensure Bash sees your Brew/Go binaries
