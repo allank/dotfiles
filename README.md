@@ -49,10 +49,6 @@ During setup, you will be prompted to:
 ├── dot_gemini/                # → ~/.gemini/
 │   └── GEMINI.md              #   Global Gemini CLI instructions (both profiles)
 │
-├── claude/                    # Reference copies (NOT deployed by chezmoi)
-│   ├── settings-home.json     #   Diff against live ~/.claude/settings.json on home
-│   └── settings-work.json     #   Diff against live ~/.claude/settings.json on work
-│
 ├── dot_gitconfig.tmpl         # → ~/.gitconfig (Profile-aware identity)
 └── dot_gitignore_global       # → ~/.gitignore_global
 ```
@@ -70,7 +66,7 @@ During setup, you will be prompted to:
 
 `bootstrap.sh` handles marketplace registration and plugin installs. `claude login` must be run before the Claude section executes — if Claude isn't authenticated when bootstrap runs, it prints the commands for you to run manually.
 
-`~/.claude/settings.json` **cannot be managed by chezmoi** — Claude Code writes to it at runtime. Use `claude/settings-home.json` or `claude/settings-work.json` as reference copies to diff against.
+`~/.claude/settings.json` **cannot be managed by chezmoi** — Claude Code writes to it at runtime. `bootstrap.sh` and `claude plugin list` are the sources of truth for what's installed.
 
 Work machine manual steps (not automated):
 - `claude plugin install slack@claude-plugins-official`
