@@ -8,3 +8,12 @@ LICENSE
 .git
 .gitignore
 .DS_Store
+conductor
+hyperkey-defaults.sh
+local_config.sh
+KEYMAPS.md
+
+# Rules are work-only — not deployed on home
+{{- if eq .profile "home" }}
+dot_claude/rules
+{{- end }}

@@ -1,0 +1,12 @@
+{{- if eq .profile "work" -}}
+@rules/how-i-product.md
+@rules/writing-style.md
+@rules/avoid-ai-patterns.md
+
+{{ end -}}
+# Global preferences
+
+- Default output format is Markdown unless asked otherwise.
+{{- if eq .profile "work" }}
+- Output format rules (`output-obsidian`, `output-gdocs`, `output-confluence`) and `pm-deliverables` are in `~/.claude/rules/` — reference with `@rules/<name>.md` when needed in a session.
+{{- end }}
