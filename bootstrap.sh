@@ -125,13 +125,11 @@ if ! command -v claude &>/dev/null; then
 else
   info "  Adding marketplaces..."
   claude plugin marketplace add allan-kent/agent-skills || true
-  claude plugin marketplace add allan-kent/agent-skills-private || true
   claude plugin marketplace add anthropics/skills || true
 
   info "  Installing plugins..."
   claude plugin install pm-craft@agent-skills || true
   claude plugin install obsidian-tools@agent-skills || true
-  claude plugin install pm-tools@agent-skills-private || true
 
   success "Claude Code plugins configured"
 fi
@@ -147,18 +145,13 @@ fi
 if [ "$ACTIVE_PROFILE" = "home" ]; then
   info "Wiring Antigravity skills..."
   SKILLS_PUBLIC="${SKILLS_PUBLIC:-$HOME/code/agent-skills}"
-  SKILLS_PRIVATE="${SKILLS_PRIVATE:-$HOME/code/agent-skills-private}"
   AGY_SKILLS_DIR="${AGY_SKILLS_DIR:-$HOME/.gemini/skills}"
 
-  if [ ! -d "$SKILLS_PUBLIC" ] || [ ! -d "$SKILLS_PRIVATE" ]; then
-    warn "Skill repos not found — clone agent-skills and agent-skills-private to ~/code/ first, then re-run"
+  if [ ! -d "$SKILLS_PUBLIC" ]; then
+    warn "Skill repo not found — clone agent-skills to ~/code/ first, then re-run"
   else
     mkdir -p "$AGY_SKILLS_DIR"
     for skill_dir in "$SKILLS_PUBLIC"/plugins/*/skills/*/; do
-      skill_name="$(basename "$skill_dir")"
-      ln -sfn "$skill_dir" "$AGY_SKILLS_DIR/$skill_name"
-    done
-    for skill_dir in "$SKILLS_PRIVATE"/plugins/*/skills/*/; do
       skill_name="$(basename "$skill_dir")"
       ln -sfn "$skill_dir" "$AGY_SKILLS_DIR/$skill_name"
     done
