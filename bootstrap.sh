@@ -117,11 +117,34 @@ else
   success "Fish is already the default shell"
 fi
 
+# Claude Code: Settings
+info "Applying Claude Code settings..."
+CLAUDE_SETTINGS="$HOME/.claude/settings.json"
+mkdir -p "$HOME/.claude"
+[ -f "$CLAUDE_SETTINGS" ] || echo '{}' > "$CLAUDE_SETTINGS"
+tmp="$(mktemp)"
+
+# Base settings — both profiles
+jq '. * {
+  "permissions": {
+    "allow": ["Read","Write","Edit","Glob","Grep","Bash","WebFetch"],
+    "deny": [],
+    "defaultMode": "acceptEdits"
+  },
+  "tui": "fullscreen"
+} | .hooks.PreToolUse = [{"matcher":"Bash","hooks":[{"type":"command","command":"rtk hook claude"}]}]' \
+  "$CLAUDE_SETTINGS" > "$tmp" && mv "$tmp" "$CLAUDE_SETTINGS"
+
+if [ "$ACTIVE_PROFILE" = "work" ]; then
+  jq '. * {"env": {"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"}, "theme": "dark-ansi"}' \
+    "$CLAUDE_SETTINGS" > "$tmp" && mv "$tmp" "$CLAUDE_SETTINGS"
+fi
+success "Claude Code settings applied"
+
 # Claude Code: Plugins
 info "Setting up Claude Code plugins..."
 if ! command -v claude &>/dev/null; then
   warn "Claude Code not in PATH — authenticate first, then re-run this section"
-  warn "Reference: claude/settings-${ACTIVE_PROFILE}.json"
 else
   info "  Adding marketplaces..."
   claude plugin marketplace add allan-kent/agent-skills || true
