@@ -59,7 +59,7 @@ During setup, you will be prompted to:
 |---|---|---|
 | GUI apps | Discord, Firefox | Slack |
 | Claude rules | — | `~/.claude/rules/` (7 files) |
-| Claude plugins | + understand-anything, Antigravity skills | + slack, Databricks AI Dev Kit |
+| Claude plugins | + Antigravity skills | + slack, Databricks AI Dev Kit |
 | GEMINI.md | ✓ | ✓ |
 
 ## Claude Code setup

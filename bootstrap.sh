@@ -127,17 +127,11 @@ else
   claude plugin marketplace add allan-kent/agent-skills || true
   claude plugin marketplace add allan-kent/agent-skills-private || true
   claude plugin marketplace add anthropics/skills || true
-  if [ "$ACTIVE_PROFILE" = "home" ]; then
-    claude plugin marketplace add Lum1104/Understand-Anything || true
-  fi
 
   info "  Installing plugins..."
   claude plugin install pm-craft@agent-skills || true
   claude plugin install obsidian-tools@agent-skills || true
   claude plugin install pm-tools@agent-skills-private || true
-  if [ "$ACTIVE_PROFILE" = "home" ]; then
-    claude plugin install understand-anything@understand-anything || true
-  fi
 
   success "Claude Code plugins configured"
 fi
