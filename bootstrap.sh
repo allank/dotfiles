@@ -43,6 +43,9 @@ else
   fi
 fi
 
+# Normalize profile to a single variable
+ACTIVE_PROFILE="${DOTFILES_PROFILE:-${PROFILE:-home}}"
+
 # Install Homebrew if not present
 if ! command -v brew &>/dev/null; then
   info "Installing Homebrew..."
@@ -114,9 +117,67 @@ else
   success "Fish is already the default shell"
 fi
 
+# Claude Code: Plugins
+info "Setting up Claude Code plugins..."
+if ! command -v claude &>/dev/null; then
+  warn "Claude Code not in PATH — authenticate first, then re-run this section"
+  warn "Reference: claude/settings-${ACTIVE_PROFILE}.json"
+else
+  info "  Adding marketplaces..."
+  claude plugin marketplace add allan-kent/agent-skills || true
+  claude plugin marketplace add allan-kent/agent-skills-private || true
+  claude plugin marketplace add anthropics/skills || true
+  if [ "$ACTIVE_PROFILE" = "home" ]; then
+    claude plugin marketplace add Lum1104/Understand-Anything || true
+  fi
+
+  info "  Installing plugins..."
+  claude plugin install pm-craft@agent-skills || true
+  claude plugin install obsidian-tools@agent-skills || true
+  claude plugin install pm-tools@agent-skills-private || true
+  if [ "$ACTIVE_PROFILE" = "home" ]; then
+    claude plugin install understand-anything@understand-anything || true
+  fi
+
+  success "Claude Code plugins configured"
+fi
+
+if [ "$ACTIVE_PROFILE" = "work" ]; then
+  info "  Work machine — manual steps remaining:"
+  echo "    claude plugin install slack@claude-plugins-official"
+  echo "    bash <(curl -sL https://raw.githubusercontent.com/databricks-solutions/ai-dev-kit/main/install.sh)"
+  echo "    # luno-pm: pending governance decision (GitHub vs Luno GitLab)"
+fi
+
+# Antigravity: Symlink skills (home only)
+if [ "$ACTIVE_PROFILE" = "home" ]; then
+  info "Wiring Antigravity skills..."
+  SKILLS_PUBLIC="${SKILLS_PUBLIC:-$HOME/code/agent-skills}"
+  SKILLS_PRIVATE="${SKILLS_PRIVATE:-$HOME/code/agent-skills-private}"
+  AGY_SKILLS_DIR="${AGY_SKILLS_DIR:-$HOME/.gemini/skills}"
+
+  if [ ! -d "$SKILLS_PUBLIC" ] || [ ! -d "$SKILLS_PRIVATE" ]; then
+    warn "Skill repos not found — clone agent-skills and agent-skills-private to ~/code/ first, then re-run"
+  else
+    mkdir -p "$AGY_SKILLS_DIR"
+    for skill_dir in "$SKILLS_PUBLIC"/plugins/*/skills/*/; do
+      skill_name="$(basename "$skill_dir")"
+      ln -sfn "$skill_dir" "$AGY_SKILLS_DIR/$skill_name"
+    done
+    for skill_dir in "$SKILLS_PRIVATE"/plugins/*/skills/*/; do
+      skill_name="$(basename "$skill_dir")"
+      ln -sfn "$skill_dir" "$AGY_SKILLS_DIR/$skill_name"
+    done
+    success "Antigravity skills linked (override path with AGY_SKILLS_DIR=... ./bootstrap.sh)"
+  fi
+fi
+
 echo ""
 success "Setup complete!"
 echo ""
 info "Next steps:"
 echo "  1. Restart your terminal"
 echo "  2. Open Neovim and let plugins install"
+if ! command -v claude &>/dev/null; then
+  echo "  3. claude login  →  then re-run: ./bootstrap.sh"
+fi

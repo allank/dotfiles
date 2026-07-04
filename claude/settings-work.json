@@ -1,0 +1,61 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Bash",
+      "WebFetch"
+    ],
+    "deny": [],
+    "defaultMode": "acceptEdits"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/allan/.ai-dev-kit/repo/.claude-plugin/check_update.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "slack@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "pm-craft@agent-skills": true,
+    "obsidian-tools@agent-skills": true,
+    "pm-tools@agent-skills-private": true
+  },
+  "extraKnownMarketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    },
+    "agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "allan-kent/agent-skills"
+      }
+    },
+    "agent-skills-private": {
+      "source": {
+        "source": "github",
+        "repo": "allan-kent/agent-skills-private"
+      }
+    }
+  },
+  "tui": "fullscreen",
+  "theme": "dark-ansi"
+}
