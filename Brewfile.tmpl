@@ -40,15 +40,14 @@ brew "xh"
 brew "dust"
 brew "yazi"
 brew "qemu"
-brew "foundry"
-brew "gemini-cli"
+brew "claude-code"
+brew "antigravity-cli"
 brew "glow"
 brew "pandoc"
 
 # GUI Apps
 {{- if eq .profile "home" }}
 cask "discord"
-cask "transmission"
 cask "firefox"
 {{- end }}
 {{- if eq .profile "work" }}
@@ -63,7 +62,6 @@ cask "ghostty"
 cask "cmux"
 cask "hyperkey"
 cask "aerospace"
-cask "antigravity"
 
 # Fonts
 cask "font-fira-code-nerd-font"
