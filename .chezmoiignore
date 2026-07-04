@@ -8,7 +8,6 @@ LICENSE
 .git
 .gitignore
 .DS_Store
-conductor
 hyperkey-defaults.sh
 local_config.sh
 KEYMAPS.md
