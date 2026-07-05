@@ -157,8 +157,8 @@ else
   claude plugin marketplace add anthropics/skills || true
 
   info "  Installing plugins..."
-  claude plugin install pm-craft@agent-skills || true
-  claude plugin install obsidian-tools@agent-skills || true
+  claude plugin install pm-craft@allank-skills || true
+  claude plugin install obsidian-tools@allank-skills || true
 
   success "Claude Code plugins configured"
 fi
