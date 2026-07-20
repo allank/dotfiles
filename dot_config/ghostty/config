@@ -1,3 +1,4 @@
+theme = TokyoNight Storm
 keybind = global:cmd+.=toggle_quick_terminal
 shell-integration = fish
 command = "/usr/local/bin/fish"
