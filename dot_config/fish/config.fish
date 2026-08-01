@@ -4,6 +4,8 @@
 # PATH configuration
 fish_add_path /opt/homebrew/bin
 fish_add_path ~/.local/bin
+fish_add_path ~/go/bin
+fish_add_path /Applications/Obsidian.app/Contents/MacOS
 
 # Go
 set -gx GOPATH ~/go
@@ -16,6 +18,16 @@ set -gx HOMEBREW_NO_ENV_HINTS 1
 alias ls="eza --color=always"
 alias cat="bat"
 alias less="bat"
+
+# Git aliases
+function sb
+    set branch (git branch | rg -v '^\*' | fzf --reverse --info=inline | string trim)
+    and git checkout $branch
+end
+
+function gu
+    git checkout main && git pull && git fetch -p && git submodule update --progress
+end
 
 # Key bindings for bash-style history expansion
 function bind_bang
