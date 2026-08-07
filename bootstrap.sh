@@ -83,7 +83,7 @@ success "Dotfiles configured"
 
 # Trust third-party taps before bundle
 info "Trusting taps..."
-for tap in nikitabobko/tap steipete/tap marcus/tap anomalyco/tap homeport/tap oven-sh/bun; do
+for tap in nikitabobko/tap steipete/tap anomalyco/tap homeport/tap oven-sh/bun; do
   brew trust "$tap" 2>/dev/null || true
 done
 
