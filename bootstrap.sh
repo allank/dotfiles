@@ -205,6 +205,8 @@ echo ""
 info "Next steps:"
 echo "  1. Restart your terminal"
 echo "  2. Open Neovim and let plugins install"
+echo "  3. Open Alfred → Preferences → General, set the hotkey to ⌘Space, and grant Accessibility when prompted"
+echo "     (⌘Space itself is already freed up — Spotlight's own shortcut was disabled above)"
 if ! command -v claude &>/dev/null; then
-  echo "  3. claude login  →  then re-run: ./bootstrap.sh"
+  echo "  4. claude login  →  then re-run: ./bootstrap.sh"
 fi
