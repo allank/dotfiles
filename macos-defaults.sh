@@ -33,6 +33,14 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 
 ###############################################################################
+# Appearance                                                                  #
+###############################################################################
+info "Configuring Appearance..."
+
+# Enable dark mode via System Events, which applies live (a raw defaults write to AppleInterfaceStyle does not)
+osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
+
+###############################################################################
 # Dock & Dashboard                                                            #
 ###############################################################################
 info "Configuring Dock..."
