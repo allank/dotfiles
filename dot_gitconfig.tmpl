@@ -7,3 +7,10 @@
 
 [core]
 	excludesFile = ~/.gitignore_global
+
+# Directories using the GitLab identity — add a new includeIf stanza here for each one
+[includeIf "gitdir:~/Dev/core/"]
+	path = ~/.gitconfig-gitlab
+
+[includeIf "gitdir:~/Dev/scratch/"]
+	path = ~/.gitconfig-gitlab
