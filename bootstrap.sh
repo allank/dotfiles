@@ -18,6 +18,14 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 info "Starting macOS setup..."
 
+# Configure TouchID for sudo (reduces password prompts for the rest of this script)
+info "Configuring TouchID for sudo..."
+if "$SCRIPT_DIR/sudo-touchid.sh"; then
+  success "TouchID for sudo configured"
+else
+  warn "TouchID for sudo configuration failed."
+fi
+
 # Profile Selection
 LOCAL_CONFIG="$SCRIPT_DIR/local_config.sh"
 if [ ! -f "$LOCAL_CONFIG" ]; then
