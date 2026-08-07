@@ -82,6 +82,15 @@ defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
 
 ###############################################################################
+# Spotlight                                                                   #
+###############################################################################
+info "Configuring Spotlight..."
+
+# Disable the "Show Spotlight search" shortcut (⌘Space) so Alfred gets it instead
+# (64 = Show Spotlight search, per Apple's symbolic hotkey table; 65 = Finder search window, untouched)
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dict><key>enabled</key><false/></dict>"
+
+###############################################################################
 # Cleanup                                                                     #
 ###############################################################################
 info "Restarting affected services..."
