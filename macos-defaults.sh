@@ -7,7 +7,10 @@ set -e
 # Logging helpers
 info() { echo -e "\033[0;34mℹ️  $1\033[0m"; }
 success() { echo -e "\033[0;32m✅ $1\033[0m"; }
-error() { echo -e "\033[0;31m❌ $1\033[0m"; exit 1; }
+error() {
+  echo -e "\033[0;31m❌ $1\033[0m"
+  exit 1
+}
 
 # Trap errors
 trap 'error "Failed to apply macOS preferences."' ERR
@@ -39,6 +42,14 @@ info "Configuring Appearance..."
 
 # Enable dark mode via System Events, which applies live (a raw defaults write to AppleInterfaceStyle does not)
 osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
+
+###############################################################################
+# Desktop                                                                     #
+###############################################################################
+info "Configuring Desktop..."
+
+# Remove default Desktop Widgets
+defaults write com.apple.WindowManager StandardHideWidgets -bool true
 
 ###############################################################################
 # Dock & Dashboard                                                            #
