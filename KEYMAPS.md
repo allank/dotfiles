@@ -2,7 +2,7 @@
 
 Quick reference for all custom keybindings across Neovim, Tmux, and Aerospace.
 
-> **Legend**: `<leader>` = Space, `C-` = Ctrl, `S-` = Shift, `alt-cmd-ctrl` = ⌥⌘⌃
+> **Legend**: `<leader>` = Space, `C-` = Ctrl, `S-` = Shift, `M-` = Meta (Option ⌥ on macOS), `alt-cmd-ctrl` = ⌥⌘⌃
 > **Note**: ⌥⌘⌃ is remaps to `<CAPS>` for ease of use
 ---
 
