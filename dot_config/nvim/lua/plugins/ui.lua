@@ -6,19 +6,16 @@ return {
 		priority = 1000,
 		lazy = false,
 		opts = {},
+		config = function(_, opts)
+			require("catppuccin").setup(opts)
+			vim.cmd.colorscheme("catppuccin")
+		end,
 	},
 
-	-- Set colorscheme in LazyVim
-	{
-		"LazyVim/LazyVim",
-		opts = {
-			colorscheme = "catppuccin",
-		},
-	},
-
-	-- Git signs (extend LazyVim defaults)
+	-- Git gutters
 	{
 		"lewis6991/gitsigns.nvim",
+		event = { "BufReadPre", "BufNewFile" },
 		opts = {
 			signs = {
 				add = { text = "+" },
@@ -36,6 +33,9 @@ return {
 		config = function()
 			require("mini.ai").setup({ n_lines = 500 })
 			require("mini.surround").setup()
+			require("mini.comment").setup()
+			require("mini.pairs").setup()
+			require("mini.icons").setup()
 
 			local statusline = require("mini.statusline")
 			statusline.setup({ use_icons = vim.g.have_nerd_font })

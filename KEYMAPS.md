@@ -15,15 +15,6 @@ Quick reference for all custom keybindings across Neovim and Aerospace.
 | `Esc` | Clear search highlighting |
 | `Y` | Yank to end of line |
 
-### Diagnostics
-
-| Key | Action |
-|-----|--------|
-| `[d` | Go to previous diagnostic |
-| `]d` | Go to next diagnostic |
-| `<leader>e` | Show diagnostic error messages |
-| `<leader>q` | Open diagnostic quickfix list |
-
 ### Window Navigation
 
 | Key | Action |
@@ -68,23 +59,25 @@ Quick reference for all custom keybindings across Neovim and Aerospace.
 | `<leader>sg` | Search by grep |
 | `<leader>sw` | Search current word |
 | `<leader>ss` | Select picker |
-| `<leader>sd` | Search diagnostics |
 | `<leader>sr` | Resume last search |
 | `<leader>s.` | Recent files |
 | `<leader>sh` | Search help |
 | `<leader>sk` | Search keymaps |
 | `<leader>sn` | Search Neovim config files |
 
-### LSP
+### Formatting
 
 | Key | Action |
 |-----|--------|
-| `gd` | Go to definition |
-| `gr` | Go to references |
-| `gI` | Go to implementation |
-| `<leader>D` | Type definition |
-| `<leader>ds` | Document symbols |
-| `<leader>ws` | Workspace symbols |
+| `<leader>cf` | Format buffer/selection (also runs on save) |
+
+### Editing (mini.nvim)
+
+| Key | Action |
+|-----|--------|
+| `gc` / `gcc` | Toggle comment (motion / line) |
+| `sa` / `sd` / `sr` | Add / delete / replace surround |
+| Bracket/quote pairs | Auto-close on insert (mini.pairs) |
 
 ---
 

@@ -17,21 +17,13 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	spec = {
-		-- LazyVim core
-		{ "LazyVim/LazyVim", import = "lazyvim.plugins" },
-		-- Language support extras
-		{ import = "lazyvim.plugins.extras.lang.go" },
-		{ import = "lazyvim.plugins.extras.lang.python" },
-		{ import = "lazyvim.plugins.extras.lang.markdown" },
-		{ import = "lazyvim.plugins.extras.lang.solidity" }, -- Re-enabled for debugging
-		-- Import custom plugins
 		{ import = "plugins" },
 	},
 	defaults = {
 		lazy = false,
 		version = false,
 	},
-	install = { colorscheme = { "catppuccin", "tokyonight", "habamax" } },
+	install = { colorscheme = { "catppuccin", "habamax" } },
 	checker = { enabled = true },
 	performance = {
 		rtp = {
