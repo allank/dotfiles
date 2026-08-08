@@ -1,6 +1,6 @@
 # Keymaps Reference
 
-Quick reference for all custom keybindings across Neovim and Aerospace.
+Quick reference for all custom keybindings across Neovim, Tmux, and Aerospace.
 
 > **Legend**: `<leader>` = Space, `C-` = Ctrl, `S-` = Shift, `alt-cmd-ctrl` = ⌥⌘⌃
 > **Note**: ⌥⌘⌃ is remaps to `<CAPS>` for ease of use
@@ -78,6 +78,70 @@ Quick reference for all custom keybindings across Neovim and Aerospace.
 | `gc` / `gcc` | Toggle comment (motion / line) |
 | `sa` / `sd` / `sr` | Add / delete / replace surround |
 | Bracket/quote pairs | Auto-close on insert (mini.pairs) |
+
+---
+
+## Tmux
+
+Prefix is `C-s` (not the tmux default `C-b`). Model: one **tmux session per project**,
+one **window per Claude session**, panes split a single Claude session's terminal
+(not separate Claude sessions).
+
+```
+ SERVER
+   │
+   ├── SESSION "frontend" ──────────┐
+   │     ├── WINDOW 1 "claude"      │  window = one Claude session
+   │     │     ├── pane 0 (claude)  │  panes split *within* a Claude session
+   │     │     └── pane 1 (shell)   │  (e.g. running tests beside it)
+   │     └── WINDOW 2 "claude"      │
+   │                                │
+   ├── SESSION "backend" ───────────┘   switch sessions: prefix C-j (picker)
+   │     └── WINDOW 1 "claude"
+   │
+   └── SESSION "dotfiles"
+         └── WINDOW 1 "claude"
+
+   switch windows: M-n / M-p (no prefix), or prefix n / p
+   navigate panes: C-h / C-j / C-k / C-l (no prefix)
+```
+
+### Sessions
+
+| Key | Action |
+|-----|--------|
+| `prefix N` | Create a new session (prompts for a name) |
+| `prefix C-j` | Switch sessions/windows (tree picker) |
+| `prefix s` | Switch sessions (tmux default picker) |
+
+### Windows (= Claude sessions)
+
+| Key | Action |
+|-----|--------|
+| `prefix c` | Create a new window (opens in current pane's directory) |
+| `M-n` | Next window (no prefix needed) |
+| `M-p` | Previous window (no prefix needed) |
+| `prefix w` | Switch windows (tmux default picker) |
+
+### Panes (within a window)
+
+| Key | Action |
+|-----|--------|
+| `prefix %` | Split pane vertically (side by side) |
+| `prefix "` | Split pane horizontally (stacked) |
+| `C-h` / `C-j` / `C-k` / `C-l` | Move focus left/down/up/right (no prefix) |
+| `prefix b` | Break pane out into its own window |
+
+### Scroll & Copy (vi-style copy-mode)
+
+| Key | Action |
+|-----|--------|
+| Mouse wheel / drag | Scroll into copy-mode; drag selects and copies |
+| `prefix [` | Enter copy-mode manually |
+| `j` / `k` / `h` / `l` | Move by line/char (in copy-mode) |
+| `v` | Begin selection (in copy-mode) |
+| `y` | Yank selection to system clipboard |
+| `q` | Exit copy-mode |
 
 ---
 
