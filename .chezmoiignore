@@ -11,6 +11,10 @@ LICENSE
 hyperkey-defaults.sh
 local_config.sh
 KEYMAPS.md
+CLAUDE.md
+CONTEXT.md
+docs
+sudo-touchid.sh
 
 # Rules are work-only — not deployed on home
 {{- if eq .profile "home" }}
