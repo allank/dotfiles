@@ -29,6 +29,24 @@ function gu
     git checkout main && git pull && git fetch -p && git submodule update --progress
 end
 
+function git-home
+    if not git rev-parse --git-dir >/dev/null 2>&1
+        git init
+    end
+    git config user.name "{{ .git_name }}"
+    git config user.email "{{ .git_email }}"
+    echo "git identity set to home: {{ .git_name }} <{{ .git_email }}>"
+end
+
+function git-work
+    if not git rev-parse --git-dir >/dev/null 2>&1
+        git init
+    end
+    git config user.name "{{ .git_name }}"
+    git config user.email "{{ .gitlab_email }}"
+    echo "git identity set to work: {{ .git_name }} <{{ .gitlab_email }}>"
+end
+
 # Key bindings for bash-style history expansion
 function bind_bang
     switch (commandline -t)[-1]
