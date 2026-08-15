@@ -15,8 +15,3 @@ CLAUDE.md
 CONTEXT.md
 docs
 sudo-touchid.sh
-
-# Rules are work-only — not deployed on home
-{{- if eq .profile "home" }}
-dot_claude/rules
-{{- end }}
