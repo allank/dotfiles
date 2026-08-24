@@ -1,8 +1,8 @@
 # Keymaps Reference
 
-Quick reference for all custom keybindings across Neovim, Tmux, and Aerospace.
+Quick reference for all custom keybindings across Neovim, Tmux, Herdr, and Aerospace.
 
-> **Legend**: `<leader>` = Space, `C-` = Ctrl, `S-` = Shift, `M-` = Meta (Option ⌥ on macOS), `alt-cmd-ctrl` = ⌥⌘⌃
+> **Legend**: `<leader>` = Space, `C-` = Control, `S-` = Shift, `⌥-` = Option, `⌥⌘⌃` = Option+Command+Control
 > **Note**: ⌥⌘⌃ is remaps to `<CAPS>` for ease of use
 ---
 
@@ -102,7 +102,7 @@ one **window per Claude session**, panes split a single Claude session's termina
    └── SESSION "dotfiles"
          └── WINDOW 1 "claude"
 
-   switch windows: M-n / M-p (no prefix), or prefix n / p
+   switch windows: ⌥-n / ⌥-p (no prefix), or prefix n / p
    navigate panes: C-h / C-j / C-k / C-l (no prefix)
 ```
 
@@ -119,8 +119,8 @@ one **window per Claude session**, panes split a single Claude session's termina
 | Key | Action |
 |-----|--------|
 | `prefix c` | Create a new window (opens in current pane's directory) |
-| `M-n` | Next window (no prefix needed) |
-| `M-p` | Previous window (no prefix needed) |
+| `⌥-n` | Next window (no prefix needed) |
+| `⌥-p` | Previous window (no prefix needed) |
 | `prefix w` | Switch windows (tmux default picker) |
 
 ### Panes (within a window)
@@ -142,6 +142,29 @@ one **window per Claude session**, panes split a single Claude session's termina
 | `v` | Begin selection (in copy-mode) |
 | `y` | Yank selection to system clipboard |
 | `q` | Exit copy-mode |
+
+---
+
+## Herdr
+
+Prefix is `C-s`, same as tmux. Herdr's model maps onto tmux's: **space** ≈ session, **tab** ≈ window, **pane** ≈ pane.
+
+| Action | Tmux | Herdr |
+|---|---|---|
+| New session/space (prompts name) | `prefix N` | `prefix N` |
+| Rename session/space | `prefix $` *(stock default, unlisted above)* | `prefix $` |
+| Session/space tree picker | `prefix C-j` (full tree), `prefix w` (window-scoped), `prefix s` (session-scoped) — all `choose-tree` variants | `prefix w` (`goto` — single unscoped picker) |
+| Next/previous session/space | `prefix )` / `prefix (` *(stock default, unlisted above)* | `prefix ⌥-n` / `prefix ⌥-p` |
+| New window/tab | `prefix c` | `prefix c` |
+| Rename window/tab | `prefix ,` *(stock default, unlisted above)* | `prefix ,` |
+| Next/previous window/tab | `⌥-n` / `⌥-p` **(no prefix)**, or `prefix n` / `prefix p` | `⌥-n` / `⌥-p` **(no prefix)**, or `prefix n` / `prefix p` |
+| Split vertical / horizontal | `prefix %` / `prefix "` | `prefix %` / `prefix "` |
+| Navigate panes | `C-h/j/k/l` **(no prefix)**, or `prefix h/j/k/l` | `C-h/j/k/l` **(no prefix)**, or `prefix h/j/k/l` |
+| Zoom pane | `prefix z` *(stock default, unlisted above)* | `prefix z` |
+| Close pane | `prefix x` *(stock default, unlisted above)* | `prefix x` |
+| Break pane into new window/tab | `prefix b` | *no equivalent action* |
+| Detach | `prefix d` *(stock default, unlisted above)* | `prefix d` |
+| Copy mode | `prefix [` | `prefix [` |
 
 ---
 

@@ -1,3 +1,52 @@
+onboarding = false
+
 [keys]
 prefix = "ctrl+s"
+
+# Tree picker/goto stays on prefix+w; workspace_picker isn't needed alongside it.
+goto = "prefix+w"
+workspace_picker = ""
+
+# next/previous_workspace ship unbound; mirror next_tab/previous_tab (prefix+n/p) with alt to avoid clashing.
+next_workspace = "prefix+alt+n"
+previous_workspace = "prefix+alt+p"
+
+# Experimental: matching tmux's prefix+$ (rename-session). Untested punctuation binding.
+rename_workspace = "prefix+$"
+
+# Matches tmux's prefix+, (rename-window); comma is documented as supported punctuation.
+rename_tab = "prefix+,"
+
+# Matches tmux's M-n/M-p (no-prefix window switching) alongside the existing prefix form.
+next_tab = ["prefix+n", "alt+n"]
+previous_tab = ["prefix+p", "alt+p"]
+
+# Matches tmux's `bind-key -n C-h/j/k/l select-pane` (no-prefix pane nav) alongside prefix form.
+focus_pane_left = ["prefix+h", "ctrl+h"]
+focus_pane_down = ["prefix+j", "ctrl+j"]
+focus_pane_up = ["prefix+k", "ctrl+k"]
+focus_pane_right = ["prefix+l", "ctrl+l"]
+
+# Experimental: matching tmux's prefix+% (split side-by-side) and prefix+" (split stacked).
+# Untested punctuation bindings.
+split_vertical = "prefix+%"
+split_horizontal = 'prefix+"'
+
+# Matches tmux's prefix+d (detach).
+detach = "prefix+d"
+
+[theme]
+name = "catppuccin"
+auto_switch = false
+
+[ui]
+# Prompt for a name when creating a workspace interactively (prefix+shift+n).
+# Quick rename any time with prefix+$ (rename_workspace, see [keys] above).
+prompt_new_workspace_name = true
+
+# Status bar along the bottom of the screen.
+tab_bar_position = "bottom"
+tab_bar_right = [
+  { type = "command", command = 'pwd | sed "s|^$HOME|~|"', interval_seconds = 2, timeout_seconds = 2 },
+]
 
