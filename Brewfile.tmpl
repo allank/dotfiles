@@ -19,6 +19,9 @@ brew "chezmoi"
 brew "gh"
 brew "rtk"
 brew "googleworkspace-cli"
+{{- if eq .profile "home" }}
+brew cloudflare-wrangler
+{{- end }}
 
 # Development
 brew "python@3.12"
