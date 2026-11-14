@@ -1,6 +1,6 @@
 # Keymaps Reference
 
-Quick reference for all custom keybindings across Neovim, Tmux, Herdr, and Aerospace.
+Quick reference for all custom keybindings across Neovim, Tmux, Herdr, Herdr app, and Aerospace.
 
 > **Legend**: `<leader>` = Space, `C-` = Control, `S-` = Shift, `⌥-` = Option, `⌥⌘⌃` = Option+Command+Control
 > **Note**: ⌥⌘⌃ is remaps to `<CAPS>` for ease of use
@@ -165,6 +165,24 @@ Prefix is `C-s`, same as tmux. Herdr's model maps onto tmux's: **space** ≈ ses
 | Break pane into new window/tab | `prefix b` | *no equivalent action* |
 | Detach | `prefix d` *(stock default, unlisted above)* | `prefix d` |
 | Copy mode | `prefix [` | `prefix [` |
+
+---
+
+## Herdr app (herdr.app)
+
+The desktop app has no prefix key: every shortcut is a single key combination (`dot_config/herdr-app/keys.json`). Only the no-prefix Herdr bindings carry over; the rest use the app's defaults.
+
+| Action | Herdr | Herdr app |
+|---|---|---|
+| Next/previous tab | `⌥-n` / `⌥-p` | `⌥-n` / `⌥-p`, or `⌘⇧]` / `⌘⇧[` |
+| Navigate panes | `C-h/j/k/l` | `C-h/j/k/l`, or `⌘⌥←/↓/↑/→` |
+| Next/previous space | `prefix ⌥-n` / `prefix ⌥-p` | `⌘⌥]` / `⌘⌥[` |
+| Picker | `prefix w` | `⌘P` |
+| Rename tab / space | `prefix ,` / `prefix $` | `F2` / `⇧F2` |
+| Split vertical / horizontal | `prefix %` / `prefix "` | `⌘D` / `⌘⇧D` |
+| Detach | `prefix d` | *no equivalent* (closing the window keeps terminals running) |
+
+Theme is Monokai Pro Machine, copied from Ghostty (`themes/monokai-pro-machine.json`).
 
 ---
 
