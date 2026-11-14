@@ -36,8 +36,6 @@ brew "zig"
 brew "node"
 brew "rustup"
 brew "hugo"
-brew "dart-sdk"
-cask "flutter"
 
 # Utilities
 brew "docker"
@@ -54,7 +52,7 @@ brew "pandoc"
 # GUI Apps
 {{- if eq .profile "home" }}
 cask "discord"
-cask "firefox"
+cask "brave-browser"
 {{- end }}
 cask "spotify"
 cask "bitwarden"
@@ -63,9 +61,9 @@ cask "alfred"
 cask "zotero"
 cask "claude"
 cask "ghostty"
-cask "cmux"
 cask "hyperkey"
 cask "aerospace"
+cask "herdr-app"
 
 # Fonts
 cask "font-fira-code-nerd-font"
