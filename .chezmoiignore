@@ -11,6 +11,7 @@ LICENSE
 hyperkey-defaults.sh
 local_config.sh
 KEYMAPS.md
+KEYMAPS-omniwm.md
 CLAUDE.md
 CONTEXT.md
 docs

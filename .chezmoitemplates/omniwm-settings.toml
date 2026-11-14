@@ -1,0 +1,439 @@
+# OmniWM settings overlay
+#
+# Merged into ~/.config/omniwm/settings.toml by dot_config/omniwm/modify_settings.toml.
+# OmniWM owns the rest of that file and rejects it if any section is missing,
+# so only the keys below are managed here:
+#   - tables ([general], [gaps], ...) are merged key by key
+#   - arrays ([[workspaces]], [[hotkeys]], [[appRules]]) replace OmniWM's entirely
+#
+# Launch OmniWM once before `chezmoi apply` so it writes its defaults first.
+# Docs: https://omniwm.app/config/settings-reference/
+
+[general]
+systemHyperTrigger = "None"        # Hyperkey.app already turns Caps Lock into ⌃⌥⌘
+defaultLayoutType = "dwindle"      # BSP tiling, closest to Aerospace 'tiles'
+workspaceAutoBackAndForth = true   # Hyper+<current workspace> returns to the previous one
+
+# Aerospace: inner 2, outer 0
+[gaps]
+size = 2.0
+
+[gaps.outer]
+top = 0.0
+bottom = 0.0
+left = 0.0
+right = 0.0
+
+# Active window border: Monokai Pro Machine yellow (#FFD76D) to match Ghostty.
+# Set enabled = false to drop it entirely.
+[borders]
+enabled = true
+width = 1.0
+
+[borders.color]
+red = 1.0
+green = 0.843
+blue = 0.427
+alpha = 0.9
+
+# No workspace bar; the OmniWM menu bar item shows the focused workspace instead (e.g. "T").
+# Only the focused monitor's workspace is shown.
+[workspaceBar]
+enabled = false
+
+[statusBar]
+showWorkspaceName = true
+showIcon = false
+
+# Clipboard history is handled by Alfred
+[clipboard]
+historyEnabled = false
+
+# Quake terminal background; 0.1-1.0. Blur (backgroundEffect) only shows when below 1.0
+[quakeTerminal]
+opacity = 0.9
+
+[scratchpads.labels]
+1 = "pad"
+
+# Workspace names must be positive integers; letters live in displayName.
+# Letter workspaces start at 10. Hotkey ids are zero-based, so workspace 10 = switchWorkspace.9
+#   B=10  E=11  F=12  M=13  N=14  T=15
+
+[[workspaces]]
+id = "AD36F001-C57E-41A5-AC1D-DF5249D007F0"
+name = "1" # Mail and Calendar
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "454CECD4-5E9D-4ED1-95D7-979D48817F5F"
+name = "2" # Socials: Slack, Telegram, Discord, WhatsApp
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "BEB842B5-E894-4791-9FD1-397C3CDD3538"
+name = "3" # Work: Jira
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "248AA883-2261-4D45-943C-79C0E46A232B"
+name = "4"
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "8B8C45D6-CE9E-41D9-BD50-BE4989D5E3DE"
+name = "5"
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "5953F2BF-A378-4266-91B2-287174C4FA4D"
+name = "6"
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "A7D5E104-6985-4516-8ED5-07F144F2A33D"
+name = "7"
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "0E18F6B0-345A-4078-8B21-33641F07A861"
+name = "8"
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "8D4D711C-2B2F-4FEC-86BF-FA952037738A"
+name = "9"
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "780FF83F-6534-433B-BA4A-82538E30EC8B"
+name = "10"
+displayName = "B" # Browser: Chrome, Firefox
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "153337F1-9875-404F-92ED-C49F519988F8"
+name = "11"
+displayName = "E" # External monitor
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "secondary"
+
+[[workspaces]]
+id = "8CDF67AA-F892-40FE-AE59-06B2979E57A0"
+name = "12"
+displayName = "F" # Finder
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "FE0530BD-0800-4979-9476-FF0D1D66A2A4"
+name = "13"
+displayName = "M" # Music: Spotify
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "3A49CE3E-0FE9-4167-B1F8-171339934C97"
+name = "14"
+displayName = "N" # Notes: Obsidian
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "3919E41A-E6A9-4784-B76F-D02FBCB5F5A6"
+name = "15"
+displayName = "T" # Terminal: Ghostty
+layoutType = "default"
+[workspaces.monitorAssignment]
+type = "main"
+
+# Hotkeys: Hyper = Control+Option+Command (Caps Lock via Hyperkey.app).
+# Any action not listed is unassigned, which also clears OmniWM's Option-key defaults.
+
+# Layout
+[[hotkeys]]
+id = "toggleWorkspaceLayout" # Dwindle <-> Niri
+binding = "Control+Option+Command+Slash"
+
+[[hotkeys]]
+id = "toggleFullscreen" # fill the workspace (either layout)
+binding = "Control+Option+Command+Comma"
+
+[[hotkeys]]
+id = "cycleSizeForward" # Niri: column width 1/3 -> 1/2 -> 2/3
+binding = "Control+Option+Command+Period"
+
+[[hotkeys]]
+id = "toggleFloatingFocus" # jump to floating windows (Preview, prefs); press again to return
+binding = "Control+Option+Shift+Command+Comma"
+
+[[hotkeys]]
+id = "balanceSizes"
+binding = "Control+Option+Command+0"
+
+# Focus
+[[hotkeys]]
+id = "focus.left"
+binding = "Control+Option+Command+H"
+
+[[hotkeys]]
+id = "focus.down"
+binding = "Control+Option+Command+J"
+
+[[hotkeys]]
+id = "focus.up"
+binding = "Control+Option+Command+K"
+
+[[hotkeys]]
+id = "focus.right"
+binding = "Control+Option+Command+L"
+
+# Move
+[[hotkeys]]
+id = "move.left"
+binding = "Control+Option+Shift+Command+H"
+
+[[hotkeys]]
+id = "move.down"
+binding = "Control+Option+Shift+Command+J"
+
+[[hotkeys]]
+id = "move.up"
+binding = "Control+Option+Shift+Command+K"
+
+[[hotkeys]]
+id = "move.right"
+binding = "Control+Option+Shift+Command+L"
+
+# Resize: plain keys for Dwindle, Shift for Niri column width
+[[hotkeys]]
+id = "resizeFocusedWindow.shrink"
+binding = "Control+Option+Command+Minus"
+
+[[hotkeys]]
+id = "resizeFocusedWindow.grow"
+binding = "Control+Option+Command+Equal"
+
+[[hotkeys]]
+id = "resizeContainerPrimarySpan.shrink"
+binding = "Control+Option+Shift+Command+Minus"
+
+[[hotkeys]]
+id = "resizeContainerPrimarySpan.grow"
+binding = "Control+Option+Shift+Command+Equal"
+
+# Workspaces 1-9
+[[hotkeys]]
+id = "switchWorkspace.0"
+binding = "Control+Option+Command+1"
+
+[[hotkeys]]
+id = "switchWorkspace.1"
+binding = "Control+Option+Command+2"
+
+[[hotkeys]]
+id = "switchWorkspace.2"
+binding = "Control+Option+Command+3"
+
+[[hotkeys]]
+id = "switchWorkspace.3"
+binding = "Control+Option+Command+4"
+
+[[hotkeys]]
+id = "switchWorkspace.4"
+binding = "Control+Option+Command+5"
+
+[[hotkeys]]
+id = "switchWorkspace.5"
+binding = "Control+Option+Command+6"
+
+[[hotkeys]]
+id = "switchWorkspace.6"
+binding = "Control+Option+Command+7"
+
+[[hotkeys]]
+id = "switchWorkspace.7"
+binding = "Control+Option+Command+8"
+
+[[hotkeys]]
+id = "switchWorkspace.8"
+binding = "Control+Option+Command+9"
+
+[[hotkeys]]
+id = "moveToWorkspace.0"
+binding = "Control+Option+Shift+Command+1"
+
+[[hotkeys]]
+id = "moveToWorkspace.1"
+binding = "Control+Option+Shift+Command+2"
+
+[[hotkeys]]
+id = "moveToWorkspace.2"
+binding = "Control+Option+Shift+Command+3"
+
+[[hotkeys]]
+id = "moveToWorkspace.3"
+binding = "Control+Option+Shift+Command+4"
+
+[[hotkeys]]
+id = "moveToWorkspace.4"
+binding = "Control+Option+Shift+Command+5"
+
+[[hotkeys]]
+id = "moveToWorkspace.5"
+binding = "Control+Option+Shift+Command+6"
+
+[[hotkeys]]
+id = "moveToWorkspace.6"
+binding = "Control+Option+Shift+Command+7"
+
+[[hotkeys]]
+id = "moveToWorkspace.7"
+binding = "Control+Option+Shift+Command+8"
+
+[[hotkeys]]
+id = "moveToWorkspace.8"
+binding = "Control+Option+Shift+Command+9"
+
+# Letter workspaces
+[[hotkeys]]
+id = "switchWorkspace.9" # B
+binding = "Control+Option+Command+B"
+
+[[hotkeys]]
+id = "switchWorkspace.10" # E
+binding = "Control+Option+Command+E"
+
+[[hotkeys]]
+id = "switchWorkspace.11" # F
+binding = "Control+Option+Command+F"
+
+[[hotkeys]]
+id = "switchWorkspace.12" # M
+binding = "Control+Option+Command+M"
+
+[[hotkeys]]
+id = "switchWorkspace.13" # N
+binding = "Control+Option+Command+N"
+
+[[hotkeys]]
+id = "switchWorkspace.14" # T
+binding = "Control+Option+Command+T"
+
+[[hotkeys]]
+id = "moveToWorkspace.9" # B
+binding = "Control+Option+Shift+Command+B"
+
+[[hotkeys]]
+id = "moveToWorkspace.10" # E
+binding = "Control+Option+Shift+Command+E"
+
+[[hotkeys]]
+id = "moveToWorkspace.11" # F
+binding = "Control+Option+Shift+Command+F"
+
+[[hotkeys]]
+id = "moveToWorkspace.12" # M
+binding = "Control+Option+Shift+Command+M"
+
+[[hotkeys]]
+id = "moveToWorkspace.13" # N
+binding = "Control+Option+Shift+Command+N"
+
+[[hotkeys]]
+id = "moveToWorkspace.14" # T
+binding = "Control+Option+Shift+Command+T"
+
+# Workspace / monitor
+[[hotkeys]]
+id = "workspaceBackAndForth"
+binding = "Control+Option+Command+Tab"
+
+[[hotkeys]]
+id = "moveWorkspaceToMonitor.right" # no wrap-around; switch to .left if the external sits left
+binding = "Control+Option+Shift+Command+Tab"
+
+# Floating terminal and scratchpad
+[[hotkeys]]
+id = "toggleQuakeTerminal"
+binding = "Control+Option+Command+Grave"
+
+[[hotkeys]]
+id = "toggleScratchpad.1"
+binding = "Control+Option+Command+S"
+
+[[hotkeys]]
+id = "assignFocusedWindowToScratchpad.1" # press again to return the window to the layout
+binding = "Control+Option+Shift+Command+S"
+
+# Navigation helpers
+[[hotkeys]]
+id = "openCommandPalette"
+binding = "Control+Option+Command+Space"
+
+[[hotkeys]]
+id = "toggleOverview"
+binding = "Control+Option+Command+O"
+
+# App rules: assignToWorkspace takes the numeric workspace name
+
+# Chat applications to workspace 2
+[[appRules]]
+bundleId = "com.tinyspeck.slackmacgap"
+assignToWorkspace = "2"
+
+[[appRules]]
+bundleId = "ru.keepcoder.Telegram"
+assignToWorkspace = "2"
+
+[[appRules]]
+bundleId = "com.hnc.Discord"
+assignToWorkspace = "2"
+
+[[appRules]]
+bundleId = "net.whatsapp.WhatsApp"
+assignToWorkspace = "2"
+
+[[appRules]]
+bundleId = "com.mitchellh.ghostty"
+assignToWorkspace = "15" # T
+
+[[appRules]]
+bundleId = "com.spotify.client"
+assignToWorkspace = "13" # M
+
+[[appRules]]
+bundleId = "md.Obsidian"
+assignToWorkspace = "14" # N
+
+[[appRules]]
+bundleId = "com.apple.Preview"
+layout = "float"
+
+[[appRules]]
+bundleId = "com.runningwithcrayons.Alfred-Preferences"
+layout = "float"

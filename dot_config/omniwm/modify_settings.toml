@@ -1,0 +1,13 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /*
+  OmniWM rewrites settings.toml itself and requires every section, so this
+  overlays .chezmoitemplates/omniwm-settings.toml onto whatever OmniWM wrote.
+  No file yet (OmniWM never launched): leave it alone so OmniWM creates defaults.
+*/ -}}
+{{- if eq (trim .chezmoi.stdin) "" -}}
+{{-   .chezmoi.stdin -}}
+{{- else -}}
+{{-   $current := fromToml .chezmoi.stdin -}}
+{{-   $overlay := fromToml (includeTemplate "omniwm-settings.toml" .) -}}
+{{-   toToml (mergeOverwrite $current $overlay) -}}
+{{- end -}}
