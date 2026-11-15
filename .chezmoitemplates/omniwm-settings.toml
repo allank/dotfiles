@@ -63,7 +63,7 @@ opacity = 0.9
 [[workspaces]]
 id = "AD36F001-C57E-41A5-AC1D-DF5249D007F0"
 name = "1" # Mail and Calendar
-layoutType = "default"
+layoutType = "niri"
 [workspaces.monitorAssignment]
 type = "main"
 
@@ -167,7 +167,7 @@ type = "main"
 id = "3919E41A-E6A9-4784-B76F-D02FBCB5F5A6"
 name = "15"
 displayName = "T" # Terminal: Ghostty
-layoutType = "default"
+layoutType = "dwindle"
 [workspaces.monitorAssignment]
 type = "main"
 
