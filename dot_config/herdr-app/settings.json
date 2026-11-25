@@ -8,5 +8,6 @@
   "theme": "monokai-pro-machine",
   "appearance": "dark",
   "font_size": 13,
-  "font": "JetBrains Mono Herdr Light"
+  "font": "JetBrains Mono NL",
+  "font_weight": 200
 }
