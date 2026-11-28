@@ -41,6 +41,7 @@ In this repo:
 | `~/.config/tmux/tmux.conf` | `dot_config/tmux/tmux.conf` |
 | `~/.local/bin/tspace` | `dot_local/bin/executable_tspace` |
 | `~/.config/tspace/ghostty.applescript` | `dot_config/tspace/ghostty.applescript` |
+| `~/.config/swiftbar/tmux-bar.30s.sh` | `dot_config/swiftbar/executable_tmux-bar.30s.sh` (SwiftBar's plugin folder is set in `macos-defaults.sh`; the cask is in `Brewfile.tmpl`) |
 
 ## 3. Agent status
 
@@ -59,7 +60,9 @@ Herdr gets status from programs reporting OSC 7501. Here each agent's hooks writ
 
 The script is a no-op outside tmux (no `$TMUX_PANE`). Alongside `@agent_status` it sets `@agent claude-code`, and it asks SwiftBar to refresh the `tmux-bar` plugin when SwiftBar is installed, so the menu changes at once rather than on the next poll.
 
-**done becomes idle once seen**, as in Herdr: a tmux hook turns `done` into `idle` when the pane gains focus (section 4).
+**done becomes idle once seen**, as in Herdr: a tmux hook turns `done` into `idle` when the pane gains focus, and refreshes the menu (section 4).
+
+**One notification per blocked transition.** When the status changes into `blocked` from anything else, the hook posts a macOS notification titled with the space and tab (`My Space / 2`) and plays the Glass sound. A repeated `blocked` posts nothing. The notification is skipped when a focused tmux client is already showing that pane, since the person is looking at it.
 
 **Other agents:** panes whose agent has no hooks show no status, the same as plain shells. Screen-scraping with `capture-pane` is a later option.
 
@@ -71,8 +74,8 @@ setw -g pane-base-index 1
 set -g focus-events on
 set -g set-titles on
 set -g set-titles-string "tspace: #{?@space_name,#{@space_name},#S} / #{window_index}"
-# done -> idle when the pane is looked at
-set-hook -g pane-focus-in 'if -F "#{==:#{@agent_status},done}" "set -p @agent_status idle"'
+# done -> idle when the pane is looked at, and refresh the menu
+set-hook -g pane-focus-in 'if -F "#{==:#{@agent_status},done}" "set -p @agent_status idle ; run-shell -b \"open -g swiftbar://refreshplugin?name=tmux-bar >/dev/null 2>&1\""'
 ```
 
 These are added to the existing `tmux.conf`, which keeps its prefix and keys. Sessions created outside `tspace` have no `@space_name`, so the title falls back to the session name.
@@ -136,7 +139,25 @@ The first AppleScript call from a new app (a terminal, or SwiftBar) asks for mac
 
 Plain `tspace ls` prints the same panes as tab-separated lines. `TSPACE_SOCKET=<name>` points it at a server started with `tmux -L <name>`, for tests.
 
-## 6. Build order
+## 6. Menu
+
+A SwiftBar plugin, `tmux-bar.30s.sh`. It polls every 30 seconds, and the agent hook and the tmux focus hook push a refresh when a status changes.
+
+**Title**, most urgent first:
+
+| State | Shows |
+|---|---|
+| Any blocked | Red `exclamationmark.bubble.fill` with `N!`, plus `M✓` if any are done |
+| Done, none blocked | `checkmark.bubble.fill` with `M✓` |
+| Only working | `ellipsis.bubble` |
+| All idle, or no agents | `bubble` |
+| No tmux server | Grey `terminal` |
+
+**Dropdown:** one section per space, ordered by its most urgent agent (blocked > done > working > idle), then by name. Rows read `tab · agent`. Agents have a status symbol that differs in shape as well as colour: red exclamation for blocked, green check for done, yellow ellipsis for working, grey circle for idle. Plain shells are listed under their space with no symbol. Clicking a row runs `tspace focus` on its pane.
+
+**Footer:** "New space…" asks for a name and a folder, runs `tspace space new` and shows the new space. "Open Ghostty" opens Ghostty.
+
+## 7. Build order
 
 | # | Deliverable | Acceptance |
 |---|---|---|

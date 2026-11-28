@@ -109,6 +109,9 @@ info "Configuring Spotlight..."
 # (64 = Show Spotlight search, per Apple's symbolic hotkey table; 65 = Finder search window, untouched)
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dict><key>enabled</key><false/></dict>"
 
+# SwiftBar reads its plugins (the tmux-bar menu) from ~/.config/swiftbar
+defaults write com.ameba.SwiftBar PluginDirectory -string "$HOME/.config/swiftbar"
+
 ###############################################################################
 # Cleanup                                                                     #
 ###############################################################################
