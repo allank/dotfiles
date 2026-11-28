@@ -62,7 +62,7 @@ The script is a no-op outside tmux (no `$TMUX_PANE`). Alongside `@agent_status` 
 
 **done becomes idle once seen**, as in Herdr: a tmux hook turns `done` into `idle` when the pane gains focus, and refreshes the menu (section 4).
 
-**One notification per blocked transition.** When the status changes into `blocked` from anything else, the hook posts a macOS notification titled with the space and tab (`My Space / 2`) and plays the Glass sound. A repeated `blocked` posts nothing. The notification is skipped when a focused tmux client is already showing that pane, since the person is looking at it.
+**One notification per blocked transition.** When the status changes into `blocked` from anything else, the hook posts a macOS notification titled with the space and tab (`My Space / 2`) and plays the Glass sound. Clicking it runs `tspace focus` on that pane. This needs `terminal-notifier` (in the Brewfile); without it the hook falls back to `osascript`, whose notifications open Script Editor when clicked. A repeated `blocked` posts nothing. The notification is skipped when a focused tmux client is already showing that pane, since the person is looking at it.
 
 **Other agents:** panes whose agent has no hooks show no status, the same as plain shells. Screen-scraping with `capture-pane` is a later option.
 

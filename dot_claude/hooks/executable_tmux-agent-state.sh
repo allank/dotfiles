@@ -26,6 +26,14 @@ fi
 "$tmux" list-clients -F '#{client_flags} #{pane_id}' 2>/dev/null |
   grep -q "focused.* $TMUX_PANE\$" && exit 0
 where=$("$tmux" display -p -t "$TMUX_PANE" '#{?@space_name,#{@space_name},#{session_name}} / #{window_index}' 2>/dev/null)
+# terminal-notifier lets a click show the pane (tspace focus). Without it, an
+# osascript notification still shows, but a click opens Script Editor.
+PATH="$PATH:/opt/homebrew/bin"
+if command -v terminal-notifier >/dev/null 2>&1; then
+  terminal-notifier -title "$where" -message "Claude needs you" -sound Glass \
+    -group "tmux-bar-$TMUX_PANE" -execute "$HOME/.local/bin/tspace focus $TMUX_PANE" >/dev/null 2>&1 &
+  exit 0
+fi
 osascript - "$where" >/dev/null 2>&1 <<'EOF'
 on run argv
 	display notification "Claude needs you" with title (item 1 of argv) sound name "Glass"
