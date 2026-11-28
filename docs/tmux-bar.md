@@ -25,7 +25,7 @@ Herdr-style spaces, tabs and agent status built from tmux, Ghostty, SwiftBar and
 ```
 ~/.local/bin/tspace                  # CLI: the herdr verbs, on tmux
 ~/.config/swiftbar/tmux-bar.30s.sh   # SwiftBar plugin (30s poll, plus push refresh)
-~/.config/tspace/focus.applescript   # Ghostty: focus the terminal with a given tty
+~/.config/tspace/ghostty.applescript # Ghostty: list ttys, focus a tty, open a window
 ~/.claude/hooks/tmux-agent-state.sh  # Claude Code hook: sets @agent_status
 ~/.config/tmux/tmux.conf             # the options and hooks in section 4
 ```
@@ -40,6 +40,7 @@ In this repo:
 | hook entries in `~/.claude/settings.json` | `dot_claude/modify_private_settings.json` (a chezmoi modify script: it adds the tmux-bar hooks and leaves every other setting and hook alone) |
 | `~/.config/tmux/tmux.conf` | `dot_config/tmux/tmux.conf` |
 | `~/.local/bin/tspace` | `dot_local/bin/executable_tspace` |
+| `~/.config/tspace/ghostty.applescript` | `dot_config/tspace/ghostty.applescript` |
 
 ## 3. Agent status
 
@@ -83,6 +84,7 @@ These are added to the existing `tmux.conf`, which keeps its prefix and keys. Se
 | `ls [--json]` | one `list-panes -a -F` call | `hc ls --json` |
 | `space new --name N [--folder F] [--argv '[...]'] [--task T]` | `new-session -d -s <slug> -c F`, then set `@space_name` and `@space_folder` | `herdr-app do space.new` |
 | `tab new [--space S] [--name N] [--folder F] [--argv '[...]'] [--task T] [--focus false]` | `new-window -t <space> -c <folder>` | `herdr-app do tab.new` |
+| `focus <terminal> [--one-window-per-space]` | `switch-client`, `select-window`, `select-pane`, then Ghostty AppleScript | `herdr-app do agent.focus` |
 
 ### `space new` and `tab new`
 
@@ -94,6 +96,27 @@ These are added to the existing `tmux.conf`, which keeps its prefix and keys. Se
 - The session name is a slug of `--name`, because tmux forbids `.` and `:`. A clash gets `-2`, `-3` and so on. The display name goes in `@space_name`.
 - `--space` takes a session id (`$3`), a session name or a display name. Inside tmux it defaults to the current space.
 - An agent tab is named after the agent (`claude`) unless `--name` is given. `--focus false` makes the tab without selecting it.
+
+### `focus`
+
+Ghostty's AppleScript dictionary (1.4) gives each terminal a `tty`, and tmux knows each client's tty. Matching the two finds the right Ghostty terminal with no state file.
+
+**Default: one Ghostty window, like the Herdr app.** Showing an agent switches that window's tmux client to the agent's space, tab and pane.
+
+1. Find the pane's session and window. An unknown pane is an error.
+2. List the tmux clients running in Ghostty, most recently active first. Clients in other terminal apps are left out, because Ghostty can't bring them to the front.
+3. Use a client already on the pane's space. Otherwise use any Ghostty client and `switch-client` it to the pane.
+4. If there is no Ghostty client, open a Ghostty window whose command is `tmux attach -t <pane>`, and wait up to 5 seconds for it to attach.
+5. `select-window` and `select-pane` on the target, which also turns `done` into `idle`.
+6. Focus the Ghostty terminal with that client's tty, and activate Ghostty.
+
+It prints `{"terminal":"%12","client":"/dev/ttys003"}`.
+
+**`--one-window-per-space`** (or `TSPACE_ONE_WINDOW_PER_SPACE=1`): step 3 only reuses a client already on the pane's space, so each space gets its own Ghostty window.
+
+Closing a Ghostty window only detaches its tmux client; every pane keeps running. Running `focus` from inside tmux never nests tmux, because it only switches clients or opens a new Ghostty window. The Ghostty window title follows `set-titles-string`, e.g. `tspace: My Space / 2`.
+
+The first AppleScript call from a new app (a terminal, or SwiftBar) asks for macOS Automation permission to control Ghostty.
 
 ### `ls`
 

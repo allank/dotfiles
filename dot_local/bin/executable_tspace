@@ -16,6 +16,7 @@ usage() {
 usage: tspace ls [--json]
        tspace space new --name N [--folder F] [--argv '["cmd", ...]'] [--task T]
        tspace tab new [--space S] [--name N] [--folder F] [--argv '[...]'] [--task T] [--focus false]
+       tspace focus <terminal> [--one-window-per-space]
 EOF
   exit 2
 }
@@ -161,10 +162,70 @@ tab_new() {
   printf '%s\n' "$made"
 }
 
+GHOSTTY_SCRIPT="$HOME/.config/tspace/ghostty.applescript"
+ghostty() { /usr/bin/osascript "$GHOSTTY_SCRIPT" "$@"; }
+
+# tmux clients running in a Ghostty terminal, most recently active first, as
+# "<tty> <session_id>" lines. Clients in other terminal apps are left out, so
+# focus never switches a client that Ghostty can't bring to the front.
+ghostty_clients() {
+  /usr/bin/pgrep -xq ghostty || return 0
+  ttys=$(ghostty ttys 2>/dev/null) || return 0
+  t list-clients -F '#{client_activity} #{client_tty} #{session_id}' 2>/dev/null | sort -rn |
+    while read -r _ tty sess; do
+      if printf '%s\n' "$ttys" | grep -qxF "$tty"; then printf '%s %s\n' "$tty" "$sess"; fi
+    done
+}
+
+# Show a pane in Ghostty: reuse a Ghostty tmux client (one already on the
+# pane's space first, else any, unless one window per space is asked for),
+# or open a Ghostty window attached to it.
+focus() {
+  [ $# -ge 1 ] || usage
+  pane=$1; shift
+  per_space=${TSPACE_ONE_WINDOW_PER_SPACE:-0}
+  for a in "$@"; do
+    case $a in
+      --one-window-per-space) per_space=1 ;;
+      *) fail "unknown argument: $a" ;;
+    esac
+  done
+  # tmux can succeed with empty fields for an unknown pane, so check the result.
+  target=$(t display -p -t "$pane" '#{pane_id} #{session_id} #{window_id}' 2>/dev/null) || target=
+  case $target in %*) ;; *) fail "no such terminal: $pane" ;; esac
+  set -- $target
+  pane=$1 sid=$2 wid=$3
+
+  clients=$(ghostty_clients)
+  client=$(printf '%s\n' "$clients" | awk -v s="$sid" '$2 == s { print $1; exit }')
+  if [ -z "$client" ] && [ "$per_space" != 1 ]; then
+    client=$(printf '%s\n' "$clients" | awk 'NF { print $1; exit }')
+  fi
+
+  if [ -n "$client" ]; then
+    t switch-client -c "$client" -t "$pane"
+  else
+    attach=$TMUX_BIN
+    [ -z "${TSPACE_SOCKET:-}" ] || attach="$attach -L $TSPACE_SOCKET"
+    ghostty new "$attach attach -t $pane" >/dev/null 2>&1 || fail "could not open a Ghostty window"
+    i=0
+    while [ -z "$client" ] && [ $i -lt 50 ]; do
+      sleep 0.1; i=$((i + 1))
+      client=$(ghostty_clients | awk -v s="$sid" '$2 == s { print $1; exit }')
+    done
+    [ -n "$client" ] || fail "Ghostty window opened but did not attach to tmux"
+  fi
+  t select-window -t "$wid"
+  t select-pane -t "$pane"
+  [ "$(ghostty focus "$client" 2>/dev/null)" = ok ] || fail "Ghostty terminal $client not found"
+  "$JQ" -nc --arg terminal "$pane" --arg client "$client" '{terminal: $terminal, client: $client}'
+}
+
 case "${1:-} ${2:-}" in
   "ls ") ls_json | "$JQ" -r '.terminals[] | [.address, .where, .agent, (.status // "-"), .cwd] | @tsv' ;;
   "ls --json") ls_json ;;
   "space new") shift 2; space_new "$@" ;;
   "tab new") shift 2; tab_new "$@" ;;
+  focus\ *) shift; focus "$@" ;;
   *) usage ;;
 esac
