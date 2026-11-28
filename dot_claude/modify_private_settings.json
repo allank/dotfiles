@@ -1,0 +1,25 @@
+#!/bin/sh
+# chezmoi modify script for ~/.claude/settings.json.
+# Claude Code rewrites this file itself, so instead of owning it this adds the
+# tmux-bar hooks (docs/tmux-bar.md) and leaves every other setting and hook as
+# it is. Re-running replaces earlier tmux-bar entries, so it is idempotent.
+input=$(cat)
+[ -n "$input" ] || input='{}'
+printf '%s\n' "$input" | /opt/homebrew/bin/jq --indent 2 '
+  def cmd($s): {type: "command", command: ("sh \"$HOME/.claude/hooks/tmux-agent-state.sh\" " + $s), timeout: 5};
+  def ours: (.command // "") | test("tmux-agent-state\\.sh");
+  def add($event; $matcher; $s):
+    .hooks[$event] = ((.hooks[$event] // []) + [{matcher: $matcher, hooks: [cmd($s)]}]);
+
+  # drop earlier tmux-bar entries, and any group left empty
+  .hooks = ((.hooks // {}) | with_entries(
+    .value |= (map(.hooks |= map(select(ours | not))) | map(select(.hooks | length > 0)))
+  ) | with_entries(select(.value | length > 0)))
+  | add("UserPromptSubmit"; "";                   "working")
+  | add("PreToolUse";       "*";                  "working")
+  | add("PostToolUse";      "*";                  "working")
+  | add("Notification";     "permission_prompt";  "blocked")
+  | add("Notification";     "elicitation_dialog"; "blocked")
+  | add("Stop";             "";                   "done")
+  | add("SessionEnd";       "";                   "unset")
+'
