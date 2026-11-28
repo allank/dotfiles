@@ -39,6 +39,7 @@ In this repo:
 | `~/.claude/hooks/tmux-agent-state.sh` | `dot_claude/hooks/executable_tmux-agent-state.sh` |
 | hook entries in `~/.claude/settings.json` | `dot_claude/modify_private_settings.json` (a chezmoi modify script: it adds the tmux-bar hooks and leaves every other setting and hook alone) |
 | `~/.config/tmux/tmux.conf` | `dot_config/tmux/tmux.conf` |
+| `~/.local/bin/tspace` | `dot_local/bin/executable_tspace` |
 
 ## 3. Agent status
 
@@ -75,7 +76,25 @@ set-hook -g pane-focus-in 'if -F "#{==:#{@agent_status},done}" "set -p @agent_st
 
 These are added to the existing `tmux.conf`, which keeps its prefix and keys. Sessions created outside `tspace` have no `@space_name`, so the title falls back to the session name.
 
-## 5. Build order
+## 5. `tspace ls`
+
+`tspace ls --json` emits the same shape as `hc ls --json`, so a menu plugin written for `hc` reads it unchanged:
+
+```json
+{"terminals":[{"address":"%12","agent":"claude-code","cwd":"/Users/me/Dev/x",
+  "status":"blocked","where":"My Space / 2","space":"$3","tab":"@7"}]}
+```
+
+- It comes from one `list-panes -a -F` call.
+- `status` is left out for panes with no `@agent_status` (plain shells), as `hc` does.
+- `agent` falls back to the pane's running command (e.g. `fish`), as `hc` does.
+- `where` falls back to the session name when there is no `@space_name`.
+- `space` and `tab` are tmux's stable session and window ids, for grouping.
+- With no tmux server running it prints nothing on stdout and exits 1, which a plugin reads as "server down".
+
+Plain `tspace ls` prints the same panes as tab-separated lines. `TSPACE_SOCKET=<name>` points it at a server started with `tmux -L <name>`, for tests.
+
+## 6. Build order
 
 | # | Deliverable | Acceptance |
 |---|---|---|

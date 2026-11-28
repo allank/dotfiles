@@ -1,0 +1,41 @@
+#!/bin/sh
+# tspace: Herdr-style spaces on tmux. See docs/tmux-bar.md in the dotfiles repo.
+# Absolute paths throughout, because SwiftBar runs this with a bare PATH.
+# TSPACE_SOCKET=<name> targets a tmux server started with -L <name> (for tests).
+set -eu
+TMUX_BIN=/opt/homebrew/bin/tmux
+JQ=/opt/homebrew/bin/jq
+
+t() {
+  if [ -n "${TSPACE_SOCKET:-}" ]; then "$TMUX_BIN" -L "$TSPACE_SOCKET" "$@"; else "$TMUX_BIN" "$@"; fi
+}
+
+usage() {
+  echo "usage: tspace ls [--json]" >&2
+  exit 2
+}
+
+# One line per pane, fields separated by the ASCII unit separator so empty
+# fields survive. Plain shells have no @agent; fall back to the running command,
+# as hc does. Sessions made outside tspace have no @space_name; use the name.
+SEP=$(printf '\037')
+FORMAT="#{pane_id}${SEP}#{?@agent,#{@agent},#{pane_current_command}}${SEP}#{pane_current_path}${SEP}#{@agent_status}${SEP}#{?@space_name,#{@space_name},#{session_name}} / #{window_index}${SEP}#{session_id}${SEP}#{window_id}"
+
+ls_json() {
+  # Exits non-zero with no output when no tmux server runs, as hc ls does.
+  panes=$(t list-panes -a -F "$FORMAT" 2>/dev/null) || { echo "tspace: no tmux server running" >&2; exit 1; }
+  printf '%s\n' "$panes" | "$JQ" -R -s -c --arg sep "$SEP" '
+    {terminals: [split("\n")[] | select(length > 0) | split($sep)
+      | {address: .[0], agent: .[1], cwd: .[2], status: .[3], where: .[4], space: .[5], tab: .[6]}
+      | if .status == "" then del(.status) else . end]}'
+}
+
+case "${1:-}" in
+  ls)
+    case "${2:-}" in
+      --json) ls_json ;;
+      "") ls_json | "$JQ" -r '.terminals[] | [.address, .where, .agent, (.status // "-"), .cwd] | @tsv' ;;
+      *) usage ;;
+    esac ;;
+  *) usage ;;
+esac
