@@ -88,6 +88,8 @@ These are added to the existing `tmux.conf`, which keeps its prefix and keys. Se
 | `space new --name N [--folder F] [--argv '[...]'] [--task T]` | `new-session -d -s <slug> -c F`, then set `@space_name` and `@space_folder` | `herdr-app do space.new` |
 | `tab new [--space S] [--name N] [--folder F] [--argv '[...]'] [--task T] [--focus false]` | `new-window -t <space> -c <folder>` | `herdr-app do tab.new` |
 | `focus <terminal> [--one-window-per-space]` | `switch-client`, `select-window`, `select-pane`, then Ghostty AppleScript | `herdr-app do agent.focus` |
+| `send [--force] [--if STATUS] <terminal> <text>` | `load-buffer`, `paste-buffer -p`, then `send-keys Enter` | `hc send` |
+| `read [--lines N] <terminal>` | `capture-pane -p -J`, with `-S -N` for history | `hc read` |
 
 ### `space new` and `tab new`
 
@@ -120,6 +122,22 @@ It prints `{"terminal":"%12","client":"/dev/ttys003"}`.
 Closing a Ghostty window only detaches its tmux client; every pane keeps running. Running `focus` from inside tmux never nests tmux, because it only switches clients or opens a new Ghostty window. The Ghostty window title follows `set-titles-string`, e.g. `tspace: My Space / 2`.
 
 The first AppleScript call from a new app (a terminal, or SwiftBar) asks for macOS Automation permission to control Ghostty.
+
+### `send` and `read`
+
+`send` pastes the text as one bracketed paste, so multi-line text arrives as one message, then presses Enter. It prints `{"sent":true,"terminal":"%12","status":"idle"}` with the status before the send.
+
+- It refuses an agent that is `blocked` unless `--force` is given, so a message can't answer a permission prompt by accident.
+- `--if <status>` sends only when the status is exactly that.
+- Unlike `hc send`, it doesn't wait for a person's unfinished draft, and it has no `--wait`.
+
+A report-back line from a worker to its orchestrator is:
+
+```sh
+tspace send %3 "Worker finished: <what changed; anything left>"
+```
+
+`read` prints the pane's screen; `--lines N` adds N lines of history above it. Full-screen programs such as Claude Code keep no tmux history, so for them `read` gives the screen only.
 
 ### `ls`
 

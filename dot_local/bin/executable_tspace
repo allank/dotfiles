@@ -17,6 +17,8 @@ usage: tspace ls [--json]
        tspace space new --name N [--folder F] [--argv '["cmd", ...]'] [--task T]
        tspace tab new [--space S] [--name N] [--folder F] [--argv '[...]'] [--task T] [--focus false]
        tspace focus <terminal> [--one-window-per-space]
+       tspace send [--force] [--if STATUS] <terminal> <text>
+       tspace read [--lines N] <terminal>
 EOF
   exit 2
 }
@@ -221,11 +223,73 @@ focus() {
   "$JQ" -nc --arg terminal "$pane" --arg client "$client" '{terminal: $terminal, client: $client}'
 }
 
+# Sets $pane to the pane id for $1, or fails. tmux can succeed with an empty
+# result for an unknown pane, so the result is checked.
+check_pane() {
+  id=$(t display -p -t "$1" '#{pane_id}' 2>/dev/null) || id=
+  case $id in %*) pane=$id ;; *) fail "no such terminal: $1" ;; esac
+}
+
+# Paste text into a pane as one bracketed paste (so multi-line text stays one
+# message), then press Enter, as hc send does. Refuses a blocked agent unless
+# --force, so a message can't answer its permission prompt by accident.
+send() {
+  force=false only= pane= text= n=0
+  while [ $# -gt 0 ]; do
+    case $1 in
+      --force) force=true; shift ;;
+      --if) need $# "$1"; only=$2; shift 2 ;;
+      --) shift; break ;;
+      --*) fail "unknown argument: $1" ;;
+      *) break ;;
+    esac
+  done
+  [ $# -eq 2 ] || fail "send needs <terminal> <text>"
+  check_pane "$1"
+  text=$2
+  status=$(t show -pv -t "$pane" @agent_status 2>/dev/null) || status=
+  if [ -n "$only" ] && [ "$status" != "$only" ]; then
+    fail "not sent: $pane is ${status:-not an agent}, not $only"
+  fi
+  if [ "$status" = blocked ] && [ "$force" != true ]; then
+    fail "not sent: $pane is blocked; --force types anyway"
+  fi
+  buffer="tspace-send-$$"
+  printf '%s' "$text" | t load-buffer -b "$buffer" -
+  t paste-buffer -p -d -b "$buffer" -t "$pane"
+  sleep 0.2   # let the program take the paste before Enter arrives
+  t send-keys -t "$pane" Enter
+  "$JQ" -nc --arg terminal "$pane" --arg status "$status" \
+    '{sent: true, terminal: $terminal, status: (if $status == "" then null else $status end)}'
+}
+
+# Print a pane's screen, plus --lines N lines of history above it, as hc read does.
+read_pane() {
+  lines=0
+  while [ $# -gt 0 ]; do
+    case $1 in
+      --lines) need $# "$1"; lines=$2; shift 2 ;;
+      --*) fail "unknown argument: $1" ;;
+      *) break ;;
+    esac
+  done
+  [ $# -eq 1 ] || fail "read needs <terminal>"
+  case $lines in '' | *[!0-9]*) fail "--lines must be a whole number" ;; esac
+  check_pane "$1"
+  if [ "$lines" -gt 0 ]; then
+    t capture-pane -p -J -t "$pane" -S "-$lines"
+  else
+    t capture-pane -p -J -t "$pane"
+  fi
+}
+
 case "${1:-} ${2:-}" in
   "ls ") ls_json | "$JQ" -r '.terminals[] | [.address, .where, .agent, (.status // "-"), .cwd] | @tsv' ;;
   "ls --json") ls_json ;;
   "space new") shift 2; space_new "$@" ;;
   "tab new") shift 2; tab_new "$@" ;;
   focus\ *) shift; focus "$@" ;;
+  send\ *) shift; send "$@" ;;
+  read\ *) shift; read_pane "$@" ;;
   *) usage ;;
 esac
