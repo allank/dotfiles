@@ -76,7 +76,26 @@ set-hook -g pane-focus-in 'if -F "#{==:#{@agent_status},done}" "set -p @agent_st
 
 These are added to the existing `tmux.conf`, which keeps its prefix and keys. Sessions created outside `tspace` have no `@space_name`, so the title falls back to the session name.
 
-## 5. `tspace ls`
+## 5. `tspace`
+
+| `tspace` | tmux underneath | Replaces |
+|---|---|---|
+| `ls [--json]` | one `list-panes -a -F` call | `hc ls --json` |
+| `space new --name N [--folder F] [--argv '[...]'] [--task T]` | `new-session -d -s <slug> -c F`, then set `@space_name` and `@space_folder` | `herdr-app do space.new` |
+| `tab new [--space S] [--name N] [--folder F] [--argv '[...]'] [--task T] [--focus false]` | `new-window -t <space> -c <folder>` | `herdr-app do tab.new` |
+
+### `space new` and `tab new`
+
+- They print what they made as `{"space":"$3","tab":"@7","terminal":"%12"}`, and errors as `{"error":"..."}` with exit 1, as `herdr-app do` does.
+- `--argv` is a JSON array of strings, e.g. `'["claude"]'`. With no `--argv` the tab is a plain shell.
+- `--task` is the agent's first message, passed as its last argument. That is how `claude "<task>"` starts with a prompt. `--task` needs `--argv`.
+- The agent runs as `fish -lic '<argv> <task>'`, with no `exec fish` at the end. The login shell's `PATH` applies, and quitting the agent closes its pane. When the last pane of a tab closes, the tab goes; when the last tab closes, the space goes. Herdr differs here: it leaves a shell prompt behind.
+- `--folder` defaults to the current directory for `space new`, and to the space's folder for `tab new`.
+- The session name is a slug of `--name`, because tmux forbids `.` and `:`. A clash gets `-2`, `-3` and so on. The display name goes in `@space_name`.
+- `--space` takes a session id (`$3`), a session name or a display name. Inside tmux it defaults to the current space.
+- An agent tab is named after the agent (`claude`) unless `--name` is given. `--focus false` makes the tab without selecting it.
+
+### `ls`
 
 `tspace ls --json` emits the same shape as `hc ls --json`, so a menu plugin written for `hc` reads it unchanged:
 

@@ -5,15 +5,31 @@
 set -eu
 TMUX_BIN=/opt/homebrew/bin/tmux
 JQ=/opt/homebrew/bin/jq
+FISH=/opt/homebrew/bin/fish
 
 t() {
   if [ -n "${TSPACE_SOCKET:-}" ]; then "$TMUX_BIN" -L "$TSPACE_SOCKET" "$@"; else "$TMUX_BIN" "$@"; fi
 }
 
 usage() {
-  echo "usage: tspace ls [--json]" >&2
+  cat >&2 <<'EOF'
+usage: tspace ls [--json]
+       tspace space new --name N [--folder F] [--argv '["cmd", ...]'] [--task T]
+       tspace tab new [--space S] [--name N] [--folder F] [--argv '[...]'] [--task T] [--focus false]
+EOF
   exit 2
 }
+
+# Like herdr-app do: errors are {"error": "..."} on stdout, exit 1.
+fail() {
+  "$JQ" -nc --arg e "$*" '{error: $e}'
+  exit 1
+}
+
+need() { [ "$1" -ge 2 ] || fail "$2 needs a value"; }
+
+# What space new and tab new print, as herdr-app do does.
+MADE='{"space":"#{session_id}","tab":"#{window_id}","terminal":"#{pane_id}"}'
 
 # One line per pane, fields separated by the ASCII unit separator so empty
 # fields survive. Plain shells have no @agent; fall back to the running command,
@@ -30,12 +46,125 @@ ls_json() {
       | if .status == "" then del(.status) else . end]}'
 }
 
-case "${1:-}" in
-  ls)
-    case "${2:-}" in
-      --json) ls_json ;;
-      "") ls_json | "$JQ" -r '.terminals[] | [.address, .where, .agent, (.status // "-"), .cwd] | @tsv' ;;
-      *) usage ;;
-    esac ;;
+# argv (a JSON array of strings) plus an optional task as its last argument,
+# quoted as one fish command line. In fish single quotes only \ and ' are special.
+FISH_LINE=$(cat <<'JQ'
+if type != "array" or length == 0 or any(.[]; type != "string")
+then error("--argv must be a non-empty JSON array of strings") else . end
+| if $task != "" then . + [$task] else . end
+| map("'" + (gsub("\\\\"; "\\\\") | gsub("'"; "\\'")) + "'")
+| join(" ")
+JQ
+)
+
+# Sets $cmd and $tab_name. Agents run as `fish -lic <argv>` with no `exec fish`
+# after, so the login PATH applies and quitting the agent closes its pane.
+# The tab is named after the agent (argv[0]), since tmux would show "fish".
+build_command() {
+  cmd= tab_name=
+  if [ -z "$argv" ]; then
+    [ -z "$task" ] || fail "--task needs --argv"
+    return 0
+  fi
+  cmd=$(printf '%s' "$argv" | "$JQ" -r --arg task "$task" "$FISH_LINE" 2>/dev/null) \
+    || fail "--argv must be a non-empty JSON array of strings"
+  tab_name=$(printf '%s' "$argv" | "$JQ" -r '.[0] | split("/") | last')
+}
+
+# Sets $folder to the absolute form of $1.
+absolute_folder() {
+  [ -d "$1" ] || fail "no such folder: $1"
+  folder=$(cd "$1" && pwd)
+}
+
+# tmux session names can't hold . or :, so the name is a slug of the display
+# name, made unique with -2, -3, ... The display name goes in @space_name.
+slug_for() {
+  base=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')
+  [ -n "$base" ] || base=space
+  slug=$base n=1
+  while t has-session -t "=$slug" 2>/dev/null; do
+    n=$((n + 1)); slug="$base-$n"
+  done
+  printf '%s' "$slug"
+}
+
+space_new() {
+  name= folder=$PWD argv= task=
+  while [ $# -gt 0 ]; do
+    case $1 in
+      --name) need $# "$1"; name=$2; shift 2 ;;
+      --folder) need $# "$1"; folder=$2; shift 2 ;;
+      --argv) need $# "$1"; argv=$2; shift 2 ;;
+      --task) need $# "$1"; task=$2; shift 2 ;;
+      *) fail "unknown argument: $1" ;;
+    esac
+  done
+  [ -n "$name" ] || fail "space new needs --name"
+  absolute_folder "$folder"
+  build_command
+  slug=$(slug_for "$name")
+
+  set -- new-session -d -s "$slug" -c "$folder" -P -F "$MADE"
+  [ -z "$cmd" ] || set -- "$@" -n "$tab_name" "$FISH" -lic "$cmd"
+  made=$(t "$@" 2>&1) || fail "tmux: $made"
+  space=$(printf '%s' "$made" | "$JQ" -r .space)
+  t set -t "$space" @space_name "$name"
+  t set -t "$space" @space_folder "$folder"
+  printf '%s\n' "$made"
+}
+
+# A session id ($3), session name, or display name; empty means this pane's space.
+resolve_space() {
+  if [ -z "$1" ]; then
+    [ -n "${TMUX_PANE:-}" ] || return 1
+    t display -p -t "$TMUX_PANE" '#{session_id}' 2>/dev/null
+    return
+  fi
+  t list-sessions -F "#{session_id}${SEP}#{session_name}${SEP}#{@space_name}" 2>/dev/null \
+    | "$JQ" -R -r --arg s "$1" --arg sep "$SEP" 'split($sep) | select(.[0] == $s or .[1] == $s or .[2] == $s) | .[0]' \
+    | head -n 1
+}
+
+tab_new() {
+  space= name= folder= argv= task= focus=true
+  while [ $# -gt 0 ]; do
+    case $1 in
+      --space) need $# "$1"; space=$2; shift 2 ;;
+      --name) need $# "$1"; name=$2; shift 2 ;;
+      --folder) need $# "$1"; folder=$2; shift 2 ;;
+      --argv) need $# "$1"; argv=$2; shift 2 ;;
+      --task) need $# "$1"; task=$2; shift 2 ;;
+      --focus) need $# "$1"; focus=$2; shift 2 ;;
+      *) fail "unknown argument: $1" ;;
+    esac
+  done
+  case $focus in true | false) ;; *) fail "--focus must be true or false" ;; esac
+  sid=$(resolve_space "$space") || true
+  if [ -z "$sid" ]; then
+    [ -n "$space" ] && fail "no space: $space"
+    fail "tab new needs --space outside tmux"
+  fi
+  if [ -n "$folder" ]; then
+    absolute_folder "$folder"
+  else
+    folder=$(t display -p -t "$sid" '#{?@space_folder,#{@space_folder},#{session_path}}')
+  fi
+  build_command
+
+  set -- new-window -t "$sid:" -c "$folder" -P -F "$MADE"
+  [ "$focus" = true ] || set -- "$@" -d
+  [ -n "$name" ] || name=$tab_name
+  [ -z "$name" ] || set -- "$@" -n "$name"
+  [ -z "$cmd" ] || set -- "$@" "$FISH" -lic "$cmd"
+  made=$(t "$@" 2>&1) || fail "tmux: $made"
+  printf '%s\n' "$made"
+}
+
+case "${1:-} ${2:-}" in
+  "ls ") ls_json | "$JQ" -r '.terminals[] | [.address, .where, .agent, (.status // "-"), .cwd] | @tsv' ;;
+  "ls --json") ls_json ;;
+  "space new") shift 2; space_new "$@" ;;
+  "tab new") shift 2; tab_new "$@" ;;
   *) usage ;;
 esac
